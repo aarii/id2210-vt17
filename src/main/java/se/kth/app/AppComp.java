@@ -88,8 +88,7 @@ public class AppComp extends ComponentDefinition {
     }
   };
 
-  ClassMatchedHandler handlePing
-    = new ClassMatchedHandler<Ping, KContentMsg<?, ?, Ping>>() {
+  ClassMatchedHandler handlePing = new ClassMatchedHandler<Ping, KContentMsg<?, ?, Ping>>() {
 
       @Override
       public void handle(Ping content, KContentMsg<?, ?, Ping> container) {
@@ -98,8 +97,7 @@ public class AppComp extends ComponentDefinition {
       }
     };
 
-  ClassMatchedHandler handlePong
-    = new ClassMatchedHandler<Pong, KContentMsg<?, KHeader<?>, Pong>>() {
+  ClassMatchedHandler handlePong = new ClassMatchedHandler<Pong, KContentMsg<?, KHeader<?>, Pong>>() {
 
       @Override
       public void handle(Pong content, KContentMsg<?, KHeader<?>, Pong> container) {
