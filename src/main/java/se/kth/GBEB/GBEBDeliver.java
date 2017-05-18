@@ -8,12 +8,13 @@ import java.io.Serializable;
 /**
  * Created by Amir on 2017-05-16.
  */
-public class Msg implements KompicsEvent, Serializable {
+public class GBEBDeliver implements KompicsEvent, Serializable {
 
-    KAddress address;
-    String msg;
+    public KAddress address;
+    public KompicsEvent msg;
 
-    public Msg(KAddress address, String msg){
+
+    public GBEBDeliver(KompicsEvent msg, KAddress address){
         this.address = address;
         this.msg = msg;
     }

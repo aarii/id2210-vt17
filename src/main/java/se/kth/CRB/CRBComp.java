@@ -1,12 +1,13 @@
 package se.kth.CRB;
 
-import se.kth.GBEB.Msg;
+import se.kth.GBEB.GBEBDeliver;
 import se.kth.app.AppComp;
-import se.sics.kompics.ComponentDefinition;
-import se.sics.kompics.Handler;
+import se.kth.eagerRB.EagerBroadcast;
+import se.kth.eagerRB.EagerDeliver;
+import se.kth.eagerRB.EagerPort;
+import se.sics.kompics.*;
 import se.sics.ktoolbox.util.network.KAddress;
 
-import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -15,30 +16,59 @@ import java.util.Set;
  */
 public class CRBComp extends ComponentDefinition {
 
-    Set<Msg> delivered;
-    Set<Msg> past;
+    Set<KompicsEvent> delivered;
+    Set<KompicsEvent> past;
     KAddress selfAdr;
+    Positive<EagerPort> eagerPort = requires(EagerPort.class);
+    Negative<CRBPort> crbPort = provides(CRBPort.class);
+
 
     public CRBComp(Init init){
 
         delivered = new HashSet<>();
         past = new HashSet<>();
-
         this.selfAdr = init.selfAdr;
+
+        subscribe(handleDeliver, eagerPort);
+        subscribe(handleBroadcast, crbPort);
+
     }
 
+    protected final Handler<CRBBroadcast> handleBroadcast = new Handler<CRBBroadcast>() {
+        @Override
+        public void handle(CRBBroadcast crbBroadcast) {
 
-   protected final Handler<Msg> handleDeliver = new Handler<Msg>() {
+            EagerBroadcast eagerBroadcast = new EagerBroadcast(crbBroadcast.msg, past);
+            trigger(eagerBroadcast, eagerPort);
+            past.add(crbBroadcast.msg);
+        }
+    };
+
+   protected final Handler<EagerDeliver> handleDeliver = new Handler<EagerDeliver>() {
        @Override
-       public void handle(Msg msg) {
+       public void handle(EagerDeliver eagerDeliver) {
 
+            EagerBroadcast eagerBroadcast = (EagerBroadcast) eagerDeliver.msg;
+           if(!delivered.contains(eagerDeliver.msg)){
+               for(KompicsEvent m : eagerBroadcast.past){
+                   if(!delivered.contains(m)){
+                       CRBDeliver crbDeliver = new CRBDeliver(m, eagerBroadcast.address);
+                        trigger(crbDeliver, crbPort);
+                        delivered.add(m);
+                   }
+                   if(!past.contains(m)){
+                       past.add(m);
+                   }
+
+               }
+               trigger(new CRBDeliver(eagerDeliver.msg, eagerDeliver.address), crbPort);
+               delivered.add(eagerDeliver.msg);
+               if(!past.contains(eagerDeliver.msg)){
+                   past.add(eagerDeliver.msg);
+               }
+           }
        }
    };
-
-
-
-
-
 
 
     public static class Init extends se.sics.kompics.Init<AppComp>{

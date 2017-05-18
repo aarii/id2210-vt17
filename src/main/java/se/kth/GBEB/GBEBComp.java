@@ -3,10 +3,10 @@ package se.kth.GBEB;
 import com.google.common.collect.Sets;
 import se.kth.app.AppComp;
 import se.kth.croupier.util.CroupierHelper;
+import se.kth.eagerRB.EagerDeliver;
 import se.sics.kompics.*;
 import se.sics.kompics.network.Network;
 import se.sics.kompics.network.Transport;
-import se.sics.kompics.network.test.Message;
 import se.sics.ktoolbox.croupier.CroupierPort;
 import se.sics.ktoolbox.croupier.event.CroupierSample;
 import se.sics.ktoolbox.util.network.KAddress;
@@ -24,18 +24,18 @@ import java.util.Set;
  */
 public class GBEBComp extends ComponentDefinition {
     Positive<Network> networkPort = requires(Network.class);
-    Negative<RBPort> rbPort = provides(RBPort.class);
+    Negative<GBEBPort> gbebPort = provides(GBEBPort.class);
     Positive<CroupierPort> croupierPort = requires(CroupierPort.class);
 
 
 
     KAddress selfAdr;
-    Set<Msg> past;
+    Set<KompicsEvent> past;
     public GBEBComp(Init init){
         this.selfAdr = init.selfAdr;
         past = new HashSet<>();
 
-        subscribe(broadcastHandler, networkPort);
+        subscribe(broadcastHandler, gbebPort);
         subscribe(handleCroupierSample, croupierPort);
         subscribe(handleDeliverHistoryRequest, networkPort);
         subscribe(handleDeliverHistoryResponse, networkPort);
@@ -44,10 +44,10 @@ public class GBEBComp extends ComponentDefinition {
 
 
 
-    public final Handler<Msg> broadcastHandler = new Handler<Msg>() {
+    public final Handler<GBEBBroadcast> broadcastHandler = new Handler<GBEBBroadcast>() {
         @Override
-        public void handle(Msg msg) {
-            past.add(msg);
+        public void handle(GBEBBroadcast gbebBroadcast) {
+            past.add(gbebBroadcast);
 
         }
     };
@@ -83,11 +83,11 @@ public class GBEBComp extends ComponentDefinition {
        @Override
        public void handle(HistoryResponse content, KContentMsg<?,?,HistoryResponse> context) {
 
-           Set<Msg> unseen = Sets.symmetricDifference(content.past, past);
+           Set<KompicsEvent> unseen = Sets.symmetricDifference(content.past, past);
+           for(KompicsEvent msg : unseen){
 
-           for(Msg msg : unseen){
-
-               trigger(msg, rbPort);
+               GBEBDeliver gbebDeliver = new GBEBDeliver(msg, context.getHeader().getSource());
+               trigger(gbebDeliver, gbebPort);
                past.add(msg);
            }
 

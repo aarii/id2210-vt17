@@ -10,9 +10,9 @@ import java.util.Set;
  */
 public class HistoryResponse implements KompicsEvent, Serializable {
 
-    Set<Msg> past;
+    Set<KompicsEvent> past;
 
-    public HistoryResponse(Set<Msg> past){
+    public HistoryResponse(Set<KompicsEvent> past){
         this.past = past;
     }
 
