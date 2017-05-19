@@ -108,7 +108,7 @@ public class GBEBComp extends ComponentDefinition {
 
 
 
-    public static class Init extends se.sics.kompics.Init<AppComp>{
+    public static class Init extends se.sics.kompics.Init<GBEBComp>{
 
         KAddress selfAdr;
         public Init (KAddress selfAdr){

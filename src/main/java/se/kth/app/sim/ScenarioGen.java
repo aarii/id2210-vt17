@@ -142,6 +142,7 @@ public class ScenarioGen {
                 systemSetup.start();
                 startBootstrapServer.startAfterTerminationOf(1000, systemSetup);
                 startPeers.startAfterTerminationOf(1000, startBootstrapServer);
+
                 terminateAfterTerminationOf(1000*1000, startPeers);
             }
         };

@@ -58,7 +58,7 @@ public class EagerComp extends ComponentDefinition {
 
 
 
-    public static class Init extends se.sics.kompics.Init<AppComp>{
+    public static class Init extends se.sics.kompics.Init<EagerComp>{
 
         KAddress selfAdr;
         public Init (KAddress selfAdr){
