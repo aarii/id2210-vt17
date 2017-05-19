@@ -1,11 +1,14 @@
 package se.kth.CRB;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import se.kth.GBEB.GBEBDeliver;
 import se.kth.app.AppComp;
 import se.kth.eagerRB.EagerBroadcast;
 import se.kth.eagerRB.EagerDeliver;
 import se.kth.eagerRB.EagerPort;
 import se.sics.kompics.*;
+import se.sics.ktoolbox.omngr.bootstrap.BootstrapClientComp;
 import se.sics.ktoolbox.util.network.KAddress;
 
 import java.util.HashSet;
@@ -15,6 +18,7 @@ import java.util.Set;
  * Created by Amir on 2017-05-16.
  */
 public class CRBComp extends ComponentDefinition {
+    private static final Logger LOG = LoggerFactory.getLogger(CRBComp.class);
 
     Set<KompicsEvent> delivered;
     Set<KompicsEvent> past;
@@ -37,7 +41,7 @@ public class CRBComp extends ComponentDefinition {
     protected final Handler<CRBBroadcast> handleBroadcast = new Handler<CRBBroadcast>() {
         @Override
         public void handle(CRBBroadcast crbBroadcast) {
-
+            LOG.debug("VI ÄR I CRBBROADCAAAAAAASSSSSTSTST");
             EagerBroadcast eagerBroadcast = new EagerBroadcast(crbBroadcast.msg, past);
             trigger(eagerBroadcast, eagerPort);
             past.add(crbBroadcast.msg);

@@ -19,6 +19,8 @@ package se.kth.app.sim;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import se.kth.app.test.TestComp;
 import se.kth.sim.compatibility.SimNodeIdExtractor;
 import se.kth.system.HostMngrComp;
 import se.sics.kompics.network.Address;
@@ -86,6 +88,7 @@ public class ScenarioGen {
                 KAddress selfAdr;
 
                 {
+
                     String nodeIp = "193.0.0." + nodeId;
                     selfAdr = ScenarioSetup.getNodeAdr(nodeIp, nodeId);
                 }

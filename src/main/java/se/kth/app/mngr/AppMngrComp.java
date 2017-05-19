@@ -52,6 +52,10 @@ public class AppMngrComp extends ComponentDefinition {
   private ExtPort extPorts;
   private KAddress selfAdr;
   private OverlayId croupierId;
+
+  public Negative<CRBPort> crbPort;
+  public Positive<EagerPort> eagerPort;
+  public Positive<GBEBPort> gbebPort;
   //***************************INTERNAL_STATE*********************************
   private Component appComp;
   private Component gbebComp;
@@ -68,6 +72,7 @@ public class AppMngrComp extends ComponentDefinition {
 
     extPorts = init.extPorts;
     croupierId = init.croupierOId;
+
 
     subscribe(handleStart, control);
     subscribe(handleCroupierConnected, omngrPort);
@@ -94,20 +99,19 @@ public class AppMngrComp extends ComponentDefinition {
   };
 
   private void connectAppComp() {
+    LOG.debug("Vi är i connectAPPCOmp");
     gbebComp = create(GBEBComp.class, new GBEBComp.Init(selfAdr));
     eagerComp = create(EagerComp.class, new EagerComp.Init(selfAdr));
     crbComp = create(CRBComp.class, new CRBComp.Init(selfAdr));
-
     appComp = create(AppComp.class, new AppComp.Init(selfAdr, croupierId));
-    connect(appComp.getNegative(Timer.class), extPorts.timerPort, Channel.TWO_WAY);
+
+    //connect(appComp.getNegative(Timer.class), extPorts.timerPort, Channel.TWO_WAY);
     connect(appComp.getNegative(Network.class), extPorts.networkPort, Channel.TWO_WAY);
-    connect(appComp.getNegative(CroupierPort.class), extPorts.croupierPort, Channel.TWO_WAY);
+    //connect(appComp.getNegative(CroupierPort.class), extPorts.croupierPort, Channel.TWO_WAY);
 
-
-    connect(crbComp.getNegative(EagerPort.class), extPorts.eagerPort, Channel.TWO_WAY);
-    connect(eagerComp.getNegative(GBEBPort.class), extPorts.gbebPort, Channel.TWO_WAY);
-    connect(eagerComp.getNegative(CRBPort.class), extPorts.crbPort, Channel.TWO_WAY);
-    connect(gbebComp.getNegative(EagerPort.class), extPorts.eagerPort, Channel.TWO_WAY);
+    connect(appComp.getNegative(CRBPort.class), crbComp.getPositive(CRBPort.class), Channel.TWO_WAY);
+    connect(crbComp.getNegative(EagerPort.class), eagerComp.getPositive(EagerPort.class), Channel.TWO_WAY);
+    connect(eagerComp.getNegative(GBEBPort.class), gbebComp.getPositive(GBEBPort.class) , Channel.TWO_WAY);
     connect(gbebComp.getNegative(Network.class), extPorts.networkPort, Channel.TWO_WAY);
     connect(gbebComp.getNegative(CroupierPort.class), extPorts.croupierPort, Channel.TWO_WAY);
 
@@ -131,21 +135,17 @@ public class AppMngrComp extends ComponentDefinition {
     public final Positive<Timer> timerPort;
     public final Positive<Network> networkPort;
     public final Positive<CroupierPort> croupierPort;
-    public final Positive<CRBPort> crbPort;
-    public final Positive<EagerPort> eagerPort;
-    public final Positive<GBEBPort> gbebPort;
     public final Negative<OverlayViewUpdatePort> viewUpdatePort;
 
     public ExtPort(Positive<Timer> timerPort, Positive<Network> networkPort, Positive<CroupierPort> croupierPort,
-      Negative<OverlayViewUpdatePort> viewUpdatePort, Positive<CRBPort> crbPort, Positive<EagerPort> eagerPort,
-                   Positive<GBEBPort> gbebPort) {
+      Negative<OverlayViewUpdatePort> viewUpdatePort) {
       this.networkPort = networkPort;
       this.timerPort = timerPort;
       this.croupierPort = croupierPort;
       this.viewUpdatePort = viewUpdatePort;
-      this.crbPort = crbPort;
-      this.eagerPort = eagerPort;
-      this.gbebPort = gbebPort;
+
     }
+
+
   }
 }

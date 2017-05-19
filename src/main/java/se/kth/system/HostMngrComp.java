@@ -19,13 +19,11 @@ package se.kth.system;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import se.kth.CRB.CRBPort;
+import se.kth.GBEB.GBEBPort;
 import se.kth.app.mngr.AppMngrComp;
-import se.sics.kompics.Channel;
-import se.sics.kompics.Component;
-import se.sics.kompics.ComponentDefinition;
-import se.sics.kompics.Handler;
-import se.sics.kompics.Positive;
-import se.sics.kompics.Start;
+import se.kth.eagerRB.EagerPort;
+import se.sics.kompics.*;
 import se.sics.kompics.network.Network;
 import se.sics.kompics.timer.Timer;
 import se.sics.ktoolbox.cc.heartbeat.CCHeartbeatPort;
@@ -49,6 +47,7 @@ public class HostMngrComp extends ComponentDefinition {
   //*****************************CONNECTIONS**********************************
   Positive<Timer> timerPort = requires(Timer.class);
   Positive<Network> networkPort = requires(Network.class);
+
   //***************************EXTERNAL_STATE*********************************
   private KAddress selfAdr;
   private KAddress bootstrapServer;
@@ -57,6 +56,11 @@ public class HostMngrComp extends ComponentDefinition {
   private Component bootstrapClientComp;
   private Component overlayMngrComp;
   private Component appMngrComp;
+  private Component gbebComp;
+  private Component eagerComp;
+  private Component crbComp;
+
+
 
   public HostMngrComp(Init init) {
     selfAdr = init.selfAdr;
@@ -95,6 +99,7 @@ public class HostMngrComp extends ComponentDefinition {
   private void connectApp() {
     AppMngrComp.ExtPort extPorts = new AppMngrComp.ExtPort(timerPort, networkPort,
       overlayMngrComp.getPositive(CroupierPort.class), overlayMngrComp.getNegative(OverlayViewUpdatePort.class));
+
     appMngrComp = create(AppMngrComp.class, new AppMngrComp.Init(extPorts, selfAdr, croupierId));
     connect(appMngrComp.getNegative(OverlayMngrPort.class), overlayMngrComp.getPositive(OverlayMngrPort.class),
       Channel.TWO_WAY);

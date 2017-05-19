@@ -18,21 +18,24 @@
 package se.kth.app;
 
 import java.util.List;
+import java.util.regex.PatternSyntaxException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import se.kth.CRB.CRBBroadcast;
+import se.kth.CRB.CRBDeliver;
+import se.kth.CRB.CRBPort;
+import se.kth.app.test.Msg;
 import se.kth.croupier.util.CroupierHelper;
 import se.kth.app.test.Ping;
 import se.kth.app.test.Pong;
-import se.sics.kompics.ClassMatchedHandler;
-import se.sics.kompics.ComponentDefinition;
-import se.sics.kompics.Handler;
-import se.sics.kompics.Positive;
-import se.sics.kompics.Start;
+import se.sics.kompics.*;
 import se.sics.kompics.network.Network;
 import se.sics.kompics.network.Transport;
 import se.sics.kompics.timer.Timer;
 import se.sics.ktoolbox.croupier.CroupierPort;
 import se.sics.ktoolbox.croupier.event.CroupierSample;
+import se.sics.ktoolbox.omngr.bootstrap.BootstrapClientComp;
 import se.sics.ktoolbox.util.identifiable.Identifier;
 import se.sics.ktoolbox.util.network.KAddress;
 import se.sics.ktoolbox.util.network.KContentMsg;
@@ -45,25 +48,24 @@ import se.sics.ktoolbox.util.network.basic.BasicHeader;
  */
 public class AppComp extends ComponentDefinition {
 
-  private static final Logger LOG = LoggerFactory.getLogger(AppComp.class);
+  private static final Logger LOG = LoggerFactory.getLogger(BootstrapClientComp.class);
   private String logPrefix = " ";
 
   //*******************************CONNECTIONS********************************
-  Positive<Timer> timerPort = requires(Timer.class);
+
   Positive<Network> networkPort = requires(Network.class);
-  Positive<CroupierPort> croupierPort = requires(CroupierPort.class);
+  Positive<CRBPort> crbPort = requires(CRBPort.class);
   //**************************************************************************
   private KAddress selfAdr;
 
   public AppComp(Init init) {
+    LOG.debug("VI ÄR I APPXOMP KONSTRUKTOR");
     selfAdr = init.selfAdr;
     logPrefix = "<nid:" + selfAdr.getId() + ">";
     LOG.info("{}initiating...", logPrefix);
 
     subscribe(handleStart, control);
-    subscribe(handleCroupierSample, croupierPort);
-    subscribe(handlePing, networkPort);
-    subscribe(handlePong, networkPort);
+    subscribe(handleMsg, networkPort);
   }
 
   Handler handleStart = new Handler<Start>() {
@@ -73,37 +75,24 @@ public class AppComp extends ComponentDefinition {
     }
   };
 
-  Handler handleCroupierSample = new Handler<CroupierSample>() {
+
+  ClassMatchedHandler handleMsg = new ClassMatchedHandler<Msg, KContentMsg<?, ?, Msg>>() {
+
     @Override
-    public void handle(CroupierSample croupierSample) {
-      if (croupierSample.publicSample.isEmpty()) {
-        return;
-      }
-      List<KAddress> sample = CroupierHelper.getSample(croupierSample);
-      for (KAddress peer : sample) {
-        KHeader header = new BasicHeader(selfAdr, peer, Transport.UDP);
-        KContentMsg msg = new BasicContentMsg(header, new Ping());
-        trigger(msg, networkPort);
-      }
+    public void handle(Msg content, KContentMsg<?, ?, Msg> container) {
+      LOG.info("{}received crbDeliver from:{}", logPrefix, container.getHeader().getSource());
+      trigger(new CRBBroadcast(content, selfAdr), crbPort);
     }
   };
 
-  ClassMatchedHandler handlePing = new ClassMatchedHandler<Ping, KContentMsg<?, ?, Ping>>() {
+  protected final Handler<CRBDeliver> handleBroadcast = new Handler<CRBDeliver>() {
+    @Override
+    public void handle(CRBDeliver crbDeliver) {
+      LOG.debug("VI ÄR I CRBDeliver i appcomp");
+    }
+  };
 
-      @Override
-      public void handle(Ping content, KContentMsg<?, ?, Ping> container) {
-        LOG.info("{}received ping from:{}", logPrefix, container.getHeader().getSource());
-        trigger(container.answer(new Pong()), networkPort);
-      }
-    };
 
-  ClassMatchedHandler handlePong = new ClassMatchedHandler<Pong, KContentMsg<?, KHeader<?>, Pong>>() {
-
-      @Override
-      public void handle(Pong content, KContentMsg<?, KHeader<?>, Pong> container) {
-        LOG.info("{}received pong from:{}", logPrefix, container.getHeader().getSource());
-      }
-    };
 
   public static class Init extends se.sics.kompics.Init<AppComp> {
 
