@@ -19,8 +19,13 @@ package se.kth.app.mngr;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import se.kth.CRB.CRBComp;
+import se.kth.CRB.CRBPort;
+import se.kth.GBEB.GBEBComp;
+import se.kth.GBEB.GBEBPort;
 import se.kth.croupier.util.NoView;
 import se.kth.app.AppComp;
+import se.kth.eagerRB.EagerPort;
 import se.sics.kompics.Channel;
 import se.sics.kompics.Component;
 import se.sics.kompics.ComponentDefinition;
@@ -54,6 +59,7 @@ public class AppMngrComp extends ComponentDefinition {
   private OverlayId croupierId;
   //***************************INTERNAL_STATE*********************************
   private Component appComp;
+  private Component gbebComp;
   //******************************AUX_STATE***********************************
   private OMngrCroupier.ConnectRequest pendingCroupierConnReq;
   //**************************************************************************
@@ -91,10 +97,15 @@ public class AppMngrComp extends ComponentDefinition {
   };
 
   private void connectAppComp() {
+    gbebComp = create(GBEBComp.class, new GBEBComp.Init());
     appComp = create(AppComp.class, new AppComp.Init(selfAdr, croupierId));
     connect(appComp.getNegative(Timer.class), extPorts.timerPort, Channel.TWO_WAY);
     connect(appComp.getNegative(Network.class), extPorts.networkPort, Channel.TWO_WAY);
     connect(appComp.getNegative(CroupierPort.class), extPorts.croupierPort, Channel.TWO_WAY);
+    connect(appComp.getPositive(CRBPort.class),  extPorts.crbPort, Channel.TWO_WAY);
+    connect(appComp.getPositive(EagerPort.class), extPorts.eagerPort, Channel.TWO_WAY);
+    connect(appComp.getPositive(GBEBPort.class), extPorts.gbebPort, Channel.TWO_WAY);
+    connect(GBEB())
   }
 
   public static class Init extends se.sics.kompics.Init<AppMngrComp> {
@@ -115,14 +126,21 @@ public class AppMngrComp extends ComponentDefinition {
     public final Positive<Timer> timerPort;
     public final Positive<Network> networkPort;
     public final Positive<CroupierPort> croupierPort;
+    public final Negative<CRBPort> crbPort;
+    public final Negative<EagerPort> eagerPort;
+    public final Negative<GBEBPort> gbebPort;
     public final Negative<OverlayViewUpdatePort> viewUpdatePort;
 
     public ExtPort(Positive<Timer> timerPort, Positive<Network> networkPort, Positive<CroupierPort> croupierPort,
-      Negative<OverlayViewUpdatePort> viewUpdatePort) {
+      Negative<OverlayViewUpdatePort> viewUpdatePort, Negative<CRBPort> crbPort, Negative<EagerPort> eagerPort,
+                   Negative<GBEBPort> gbebPort) {
       this.networkPort = networkPort;
       this.timerPort = timerPort;
       this.croupierPort = croupierPort;
       this.viewUpdatePort = viewUpdatePort;
+      this.crbPort = crbPort;
+      this.eagerPort = eagerPort;
+      this.gbebPort = gbebPort;
     }
   }
 }

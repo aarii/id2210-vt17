@@ -49,6 +49,7 @@ public class CRBComp extends ComponentDefinition {
        public void handle(EagerDeliver eagerDeliver) {
 
             EagerBroadcast eagerBroadcast = (EagerBroadcast) eagerDeliver.msg;
+
            if(!delivered.contains(eagerDeliver.msg)){
                for(KompicsEvent m : eagerBroadcast.past){
                    if(!delivered.contains(m)){
