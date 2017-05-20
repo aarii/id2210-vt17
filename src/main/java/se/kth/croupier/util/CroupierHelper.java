@@ -19,7 +19,11 @@ package se.kth.croupier.util;
 
 import java.util.LinkedList;
 import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import se.sics.ktoolbox.croupier.event.CroupierSample;
+import se.sics.ktoolbox.omngr.bootstrap.BootstrapClientComp;
 import se.sics.ktoolbox.util.network.KAddress;
 import se.sics.ktoolbox.util.other.AgingAdrContainer;
 
@@ -27,8 +31,11 @@ import se.sics.ktoolbox.util.other.AgingAdrContainer;
  * @author Alex Ormenisan <aaor@kth.se>
  */
 public class CroupierHelper {
+  private static final Logger LOG = LoggerFactory.getLogger(BootstrapClientComp.class);
+
   public static List<KAddress> getSample(CroupierSample<Boolean> sample) {
     List<KAddress> s = new LinkedList<>();
+   LOG.debug("VI ÄR I CROUPIERHELPER");
     for(AgingAdrContainer<KAddress, Boolean> e: sample.publicSample.values()) {
       s.add(e.getSource());
     }

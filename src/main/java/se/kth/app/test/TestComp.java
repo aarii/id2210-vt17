@@ -1,13 +1,19 @@
 package se.kth.app.test;
 
+import javafx.geometry.Pos;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import se.kth.GBEB.HistoryRequest;
 import se.kth.app.AppComp;
+import se.kth.app.sim.ScenarioSetup;
 import se.sics.kompics.ComponentDefinition;
 import se.sics.kompics.Handler;
 import se.sics.kompics.Positive;
 import se.sics.kompics.Start;
 import se.sics.kompics.network.Network;
 import se.sics.kompics.network.Transport;
+import se.sics.kompics.timer.Timer;
+import se.sics.ktoolbox.omngr.bootstrap.BootstrapClientComp;
 import se.sics.ktoolbox.overlaymngr.events.OMngrCroupier;
 import se.sics.ktoolbox.util.identifiable.BasicBuilders;
 import se.sics.ktoolbox.util.identifiable.BasicIdentifiers;
@@ -23,14 +29,19 @@ import se.sics.ktoolbox.util.network.nat.NatAwareAddressImpl;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
-import static se.sics.kompics.network.netty.serialization.Serializers.LOG;
+
+
 
 /**
  * Created by araxi on 2017-05-19.
  */
 public class TestComp extends ComponentDefinition {
+    private static final Logger LOG = LoggerFactory.getLogger(BootstrapClientComp.class);
+
     Positive<Network> networkPort = requires(Network.class);
+    Positive<Timer> timerPort = requires(Timer.class);
     KAddress selfAdr;
+
     private String logPrefix = " ";
     public static final int appPort = 12345;
 
@@ -49,31 +60,23 @@ public class TestComp extends ComponentDefinition {
         @Override
         public void handle(Start event) {
             LOG.info("{}starting...", logPrefix);
-            KHeader header = new BasicHeader(selfAdr, getNodeAdr("193.0.0", 1), Transport.UDP);
+            KHeader header = new BasicHeader(selfAdr, ScenarioSetup.getNodeAdr("193.0.0", 1), Transport.UDP);
             KContentMsg msg = new BasicContentMsg(header, new Msg());
             trigger(msg, networkPort);
         }
     };
 
-    public static KAddress getNodeAdr(String nodeIp, int baseNodeId) {
-        try {
-            Identifier nodeId = BasicIdentifiers.nodeId(new BasicBuilders.IntBuilder(baseNodeId));
-            return NatAwareAddressImpl.open(new BasicAddress(InetAddress.getByName(nodeIp), appPort, nodeId));
-        } catch (UnknownHostException ex) {
-            throw new RuntimeException(ex);
-        }
-    }
 
 
 
     public static class Init extends se.sics.kompics.Init<TestComp> {
 
         public final KAddress selfAdr;
-        public final Identifier gradientOId;
 
-        public Init(KAddress selfAdr, Identifier gradientOId) {
+
+        public Init(KAddress selfAdr) {
             this.selfAdr = selfAdr;
-            this.gradientOId = gradientOId;
+
         }
     }
 }

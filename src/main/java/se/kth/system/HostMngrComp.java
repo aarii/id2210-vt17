@@ -71,11 +71,15 @@ public class HostMngrComp extends ComponentDefinition {
     croupierId = init.croupierId;
 
     subscribe(handleStart, control);
-
+ LOG.debug("Innan connectBootstrapClient");
     connectBootstrapClient();
+    LOG.debug("Innan connectOverlayMngr");
     connectOverlayMngr();
+    LOG.debug("Innan connectApp");
     connectApp();
+    LOG.debug("Efter connectApp");
   }
+
 
   Handler handleStart = new Handler<Start>() {
     @Override
@@ -99,7 +103,7 @@ public class HostMngrComp extends ComponentDefinition {
   private void connectApp() {
     AppMngrComp.ExtPort extPorts = new AppMngrComp.ExtPort(timerPort, networkPort,
       overlayMngrComp.getPositive(CroupierPort.class), overlayMngrComp.getNegative(OverlayViewUpdatePort.class));
-
+    LOG.debug("HEHEHE");
     appMngrComp = create(AppMngrComp.class, new AppMngrComp.Init(extPorts, selfAdr, croupierId));
     connect(appMngrComp.getNegative(OverlayMngrPort.class), overlayMngrComp.getPositive(OverlayMngrPort.class),
       Channel.TWO_WAY);

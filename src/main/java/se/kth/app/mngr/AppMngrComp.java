@@ -23,6 +23,7 @@ import se.kth.CRB.CRBComp;
 import se.kth.CRB.CRBPort;
 import se.kth.GBEB.GBEBComp;
 import se.kth.GBEB.GBEBPort;
+import se.kth.app.test.TestComp;
 import se.kth.croupier.util.NoView;
 import se.kth.app.AppComp;
 import se.kth.eagerRB.EagerComp;
@@ -53,14 +54,12 @@ public class AppMngrComp extends ComponentDefinition {
   private KAddress selfAdr;
   private OverlayId croupierId;
 
-  public Negative<CRBPort> crbPort;
-  public Positive<EagerPort> eagerPort;
-  public Positive<GBEBPort> gbebPort;
   //***************************INTERNAL_STATE*********************************
   private Component appComp;
   private Component gbebComp;
   private Component crbComp;
   private Component eagerComp;
+  private Component testComp;
   //******************************AUX_STATE***********************************
   private OMngrCroupier.ConnectRequest pendingCroupierConnReq;
   //**************************************************************************
@@ -104,11 +103,10 @@ public class AppMngrComp extends ComponentDefinition {
     eagerComp = create(EagerComp.class, new EagerComp.Init(selfAdr));
     crbComp = create(CRBComp.class, new CRBComp.Init(selfAdr));
     appComp = create(AppComp.class, new AppComp.Init(selfAdr, croupierId));
+    testComp = create(TestComp.class, new TestComp.Init(selfAdr));
 
-    //connect(appComp.getNegative(Timer.class), extPorts.timerPort, Channel.TWO_WAY);
+    connect(testComp.getNegative(Network.class), extPorts.networkPort, Channel.TWO_WAY);
     connect(appComp.getNegative(Network.class), extPorts.networkPort, Channel.TWO_WAY);
-    //connect(appComp.getNegative(CroupierPort.class), extPorts.croupierPort, Channel.TWO_WAY);
-
     connect(appComp.getNegative(CRBPort.class), crbComp.getPositive(CRBPort.class), Channel.TWO_WAY);
     connect(crbComp.getNegative(EagerPort.class), eagerComp.getPositive(EagerPort.class), Channel.TWO_WAY);
     connect(eagerComp.getNegative(GBEBPort.class), gbebComp.getPositive(GBEBPort.class) , Channel.TWO_WAY);
@@ -139,6 +137,7 @@ public class AppMngrComp extends ComponentDefinition {
 
     public ExtPort(Positive<Timer> timerPort, Positive<Network> networkPort, Positive<CroupierPort> croupierPort,
       Negative<OverlayViewUpdatePort> viewUpdatePort) {
+      LOG.debug("HEJ VI E HÄR");
       this.networkPort = networkPort;
       this.timerPort = timerPort;
       this.croupierPort = croupierPort;

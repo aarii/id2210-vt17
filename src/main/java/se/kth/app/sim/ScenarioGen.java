@@ -86,7 +86,6 @@ public class ScenarioGen {
         public StartNodeEvent generate(final Integer nodeId) {
             return new StartNodeEvent() {
                 KAddress selfAdr;
-
                 {
 
                     String nodeIp = "193.0.0." + nodeId;
@@ -120,6 +119,38 @@ public class ScenarioGen {
         }
     };
 
+
+    static Operation1<StartNodeEvent, Integer> startTestCompOp = new Operation1<StartNodeEvent, Integer>() {
+
+        @Override
+        public StartNodeEvent generate(final Integer nodeId) {
+            return new StartNodeEvent() {
+                KAddress selfAdr;
+
+                {
+                    selfAdr = ScenarioSetup.getNodeAdr("193.0.0", nodeId);
+                }
+
+                @Override
+                public Address getNodeAddress() {
+                    return selfAdr;
+                }
+
+                @Override
+                public Class getComponentDefinition() {
+                    return TestComp.class;
+                }
+
+                @Override
+                public TestComp.Init getComponentInit() {
+                    return new TestComp.Init(selfAdr);
+                }
+            };
+        }
+    };
+
+
+
     public static SimulationScenario simpleBoot() {
         SimulationScenario scen = new SimulationScenario() {
             {
@@ -141,12 +172,19 @@ public class ScenarioGen {
                         raise(100, startNodeOp, new BasicIntSequentialDistribution(1));
                     }
                 };
+                StochasticProcess startTestComp = new StochasticProcess() {
+                    {
+                        eventInterArrivalTime(uniform(1000, 1100));
+                        raise(100, startTestCompOp, new BasicIntSequentialDistribution(1));
+                    }
+                };
 
                 systemSetup.start();
                 startBootstrapServer.startAfterTerminationOf(1000, systemSetup);
                 startPeers.startAfterTerminationOf(1000, startBootstrapServer);
+                startTestComp.startAfterStartOf(2000, startPeers);
 
-                terminateAfterTerminationOf(1000*1000, startPeers);
+                terminateAfterTerminationOf(1000*1000, startTestComp);
             }
         };
 
