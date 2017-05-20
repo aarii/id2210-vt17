@@ -25,6 +25,7 @@ import org.slf4j.LoggerFactory;
 import se.kth.CRB.CRBBroadcast;
 import se.kth.CRB.CRBDeliver;
 import se.kth.CRB.CRBPort;
+import se.kth.app.sim.ScenarioSetup;
 import se.kth.app.test.Msg;
 import se.kth.croupier.util.CroupierHelper;
 import se.kth.app.test.Ping;
@@ -63,7 +64,6 @@ public class AppComp extends ComponentDefinition {
   private KAddress selfAdr;
 
   public AppComp(Init init) {
-    LOG.debug("VI ÄR I APPXOMP KONSTRUKTOR");
     selfAdr = init.selfAdr;
     logPrefix = "<nid:" + selfAdr.getId() + ">";
     LOG.info("{}initiating...", logPrefix);
@@ -87,8 +87,8 @@ public class AppComp extends ComponentDefinition {
     public void handle(Msg content, KContentMsg<?, ?, Msg> container) {
       LOG.info("{}received Msg from:{}", logPrefix, container.getHeader().getSource());
       LOG.info("selfAdr is:" + selfAdr);
-      //trigger(new CRBBroadcast(content, selfAdr), crbPort);
-      trigger (new EagerBroadcast(content, selfAdr), eagerPort);
+      trigger(new CRBBroadcast(content, selfAdr), crbPort);
+
       LOG.info("sent crbbroadcast");
     }
   };

@@ -90,15 +90,18 @@ public class AppMngrComp extends ComponentDefinition {
   Handler handleCroupierConnected = new Handler<OMngrCroupier.ConnectResponse>() {
     @Override
     public void handle(OMngrCroupier.ConnectResponse event) {
-      LOG.info("{}overlays connected", logPrefix);
       connectAppComp();
+      trigger(Start.event, crbComp.control());
+      trigger(Start.event, gbebComp.control());
+      trigger(Start.event, eagerComp.control());
       trigger(Start.event, appComp.control());
       trigger(new OverlayViewUpdate.Indication<>(croupierId, false, new NoView()), extPorts.viewUpdatePort);
+      LOG.info("{}overlays connected", logPrefix);
+
     }
   };
 
   private void connectAppComp() {
-    LOG.debug("Vi är i connectAPPCOmp");
     gbebComp = create(GBEBComp.class, new GBEBComp.Init(selfAdr));
     eagerComp = create(EagerComp.class, new EagerComp.Init(selfAdr));
     crbComp = create(CRBComp.class, new CRBComp.Init(selfAdr));
@@ -122,9 +125,7 @@ public class AppMngrComp extends ComponentDefinition {
     public final OverlayId croupierOId;
 
     public Init(ExtPort extPorts, KAddress selfAdr, OverlayId croupierOId) {
-      LOG.debug("extPorts: " + extPorts);
-      LOG.debug("selfAdr: " + selfAdr);
-      LOG.debug("croupier id: " + croupierOId);
+
       this.extPorts = extPorts;
       this.selfAdr = selfAdr;
       this.croupierOId = croupierOId;
@@ -140,7 +141,6 @@ public class AppMngrComp extends ComponentDefinition {
 
     public ExtPort(Positive<Timer> timerPort, Positive<Network> networkPort, Positive<CroupierPort> croupierPort,
       Negative<OverlayViewUpdatePort> viewUpdatePort) {
-      LOG.debug("HEJ VI E HÄR");
       this.networkPort = networkPort;
       this.timerPort = timerPort;
       this.croupierPort = croupierPort;

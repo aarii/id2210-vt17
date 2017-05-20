@@ -3,7 +3,9 @@ package se.kth.GBEB;
 import com.google.common.collect.Sets;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import se.kth.CRB.CRBBroadcast;
 import se.kth.app.AppComp;
+import se.kth.app.test.Msg;
 import se.kth.app.test.TestComp;
 import se.kth.croupier.util.CroupierHelper;
 import se.kth.eagerRB.EagerDeliver;
@@ -47,6 +49,7 @@ public class GBEBComp extends ComponentDefinition {
         subscribe(handleDeliverHistoryResponse, networkPort);
 
     }
+
 
 
 

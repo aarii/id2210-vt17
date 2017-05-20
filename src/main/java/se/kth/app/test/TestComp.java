@@ -60,10 +60,10 @@ public class TestComp extends ComponentDefinition {
         @Override
         public void handle(Start event) {
             LOG.info("{}starting...", logPrefix);
-            KHeader header = new BasicHeader(selfAdr, ScenarioSetup.getNodeAdr("193.0.0.0", 1), Transport.UDP);
+            KHeader header = new BasicHeader(selfAdr, ScenarioSetup.getNodeAdr("193.0.0.1", 1), Transport.UDP);
             KContentMsg msg = new BasicContentMsg(header, new Msg());
             trigger(msg, networkPort);
-            LOG.debug("Sent msg to network from " + selfAdr);
+            LOG.debug("Sent msg to network to " + ScenarioSetup.getNodeAdr("193.0.0.1", 1) + " i am " + selfAdr);
         }
     };
 

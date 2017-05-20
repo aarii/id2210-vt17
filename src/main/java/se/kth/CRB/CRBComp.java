@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import se.kth.GBEB.GBEBDeliver;
 import se.kth.app.AppComp;
+import se.kth.app.test.Msg;
 import se.kth.eagerRB.EagerBroadcast;
 import se.kth.eagerRB.EagerDeliver;
 import se.kth.eagerRB.EagerPort;
@@ -18,7 +19,7 @@ import java.util.Set;
  * Created by Amir on 2017-05-16.
  */
 public class CRBComp extends ComponentDefinition {
-    private static final Logger LOG = LoggerFactory.getLogger(CRBBroadcast.class);
+    private static final Logger LOG = LoggerFactory.getLogger(CRBComp.class);
 
     Set<KompicsEvent> delivered;
     Set<KompicsEvent> past;
@@ -28,8 +29,7 @@ public class CRBComp extends ComponentDefinition {
 
 
     public CRBComp(Init init){
-        LOG.info("ÄR i init i CRBComp");
-        LOG.debug("tjabababdbai");
+        LOG.info("Är i init i CRBComp");
         delivered = new HashSet<>();
         past = new HashSet<>();
         this.selfAdr = init.selfAdr;
@@ -37,13 +37,15 @@ public class CRBComp extends ComponentDefinition {
 
         subscribe(handleDeliver, eagerPort);
         subscribe(handleBroadcast, crbPort);
+        LOG.info("Är i CRBComp och är efter subscribat handler");
 
     }
 
       Handler<CRBBroadcast> handleBroadcast = new Handler<CRBBroadcast>() {
         @Override
         public void handle(CRBBroadcast crbBroadcast) {
-            LOG.info("VI ÄR I CRBBROADCAAAAAAASSSSSTSTST");
+            LOG.info("Vi är i handleBroadcast");
+            LOG.info("CRBComps address är " + selfAdr);
             EagerBroadcast eagerBroadcast = new EagerBroadcast(crbBroadcast.msg, past);
             trigger(eagerBroadcast, eagerPort);
             past.add(crbBroadcast.msg);

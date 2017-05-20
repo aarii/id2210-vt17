@@ -18,8 +18,5 @@ public class CRBPort extends PortType {
         request(EagerDeliver.class);
         indication(CRBDeliver.class);
         indication(EagerBroadcast.class);
-
-
-
     }
 }
