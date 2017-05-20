@@ -45,7 +45,7 @@ import se.sics.ktoolbox.util.overlays.view.OverlayViewUpdatePort;
  */
 public class AppMngrComp extends ComponentDefinition {
 
-  private static final Logger LOG = LoggerFactory.getLogger(BootstrapClientComp.class);
+  private static final Logger LOG = LoggerFactory.getLogger(AppMngrComp.class);
   private String logPrefix = "";
   //*****************************CONNECTIONS**********************************
   Positive<OverlayMngrPort> omngrPort = requires(OverlayMngrPort.class);
@@ -122,6 +122,9 @@ public class AppMngrComp extends ComponentDefinition {
     public final OverlayId croupierOId;
 
     public Init(ExtPort extPorts, KAddress selfAdr, OverlayId croupierOId) {
+      LOG.debug("extPorts: " + extPorts);
+      LOG.debug("selfAdr: " + selfAdr);
+      LOG.debug("croupier id: " + croupierOId);
       this.extPorts = extPorts;
       this.selfAdr = selfAdr;
       this.croupierOId = croupierOId;

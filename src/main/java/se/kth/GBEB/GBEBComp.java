@@ -1,7 +1,10 @@
 package se.kth.GBEB;
 
 import com.google.common.collect.Sets;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import se.kth.app.AppComp;
+import se.kth.app.test.TestComp;
 import se.kth.croupier.util.CroupierHelper;
 import se.kth.eagerRB.EagerDeliver;
 import se.sics.kompics.*;
@@ -14,6 +17,7 @@ import se.sics.ktoolbox.util.network.KContentMsg;
 import se.sics.ktoolbox.util.network.KHeader;
 import se.sics.ktoolbox.util.network.basic.BasicContentMsg;
 import se.sics.ktoolbox.util.network.basic.BasicHeader;
+import sun.rmi.runtime.Log;
 
 import java.util.HashSet;
 import java.util.List;
@@ -23,6 +27,8 @@ import java.util.Set;
  * Created by Amir on 2017-05-16.
  */
 public class GBEBComp extends ComponentDefinition {
+    private static final Logger LOG = LoggerFactory.getLogger(GBEBComp.class);
+
     Positive<Network> networkPort = requires(Network.class);
     Negative<GBEBPort> gbebPort = provides(GBEBPort.class);
     Positive<CroupierPort> croupierPort = requires(CroupierPort.class);
@@ -48,6 +54,7 @@ public class GBEBComp extends ComponentDefinition {
         @Override
         public void handle(GBEBBroadcast gbebBroadcast) {
             past.add(gbebBroadcast);
+            LOG.debug("added to my past in GBEBBroadcast");
 
         }
     };
@@ -64,6 +71,7 @@ public class GBEBComp extends ComponentDefinition {
                 KHeader header = new BasicHeader(selfAdr, peer, Transport.UDP);
                 KContentMsg msg = new BasicContentMsg(header, new HistoryRequest());
                 trigger(msg, networkPort);
+                LOG.debug("Received CroupierSample" + sample);
             }
         }
     };

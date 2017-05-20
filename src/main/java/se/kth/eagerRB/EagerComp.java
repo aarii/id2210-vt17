@@ -1,9 +1,12 @@
 package se.kth.eagerRB;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import se.kth.GBEB.GBEBBroadcast;
 import se.kth.GBEB.GBEBDeliver;
 import se.kth.GBEB.GBEBPort;
 import se.kth.app.AppComp;
+import se.kth.app.test.TestComp;
 import se.sics.kompics.*;
 import se.sics.ktoolbox.util.network.KAddress;
 
@@ -14,6 +17,7 @@ import java.util.Set;
  * Created by araxi on 2017-05-16.
  */
 public class EagerComp extends ComponentDefinition {
+    private static final Logger LOG = LoggerFactory.getLogger(EagerComp.class);
 
     KAddress selfAdr;
     Set<KompicsEvent> delivered;
@@ -38,6 +42,7 @@ public class EagerComp extends ComponentDefinition {
         public void handle(EagerBroadcast eagerBroadcast) {
             GBEBBroadcast gbebBroadcast = new GBEBBroadcast(eagerBroadcast, selfAdr);
             trigger(gbebBroadcast, gbebPort);
+            LOG.info("Received EagerBroadcast from:" + eagerBroadcast.address);
         }
     };
 

@@ -1,6 +1,7 @@
 package se.kth.app.test;
 
 import javafx.geometry.Pos;
+import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import se.kth.GBEB.HistoryRequest;
@@ -36,7 +37,7 @@ import java.net.UnknownHostException;
  * Created by araxi on 2017-05-19.
  */
 public class TestComp extends ComponentDefinition {
-    private static final Logger LOG = LoggerFactory.getLogger(BootstrapClientComp.class);
+    private static final Logger LOG = LoggerFactory.getLogger(TestComp.class);
 
     Positive<Network> networkPort = requires(Network.class);
     Positive<Timer> timerPort = requires(Timer.class);
@@ -47,7 +48,6 @@ public class TestComp extends ComponentDefinition {
 
 
     public TestComp(Init init) {
-        LOG.debug("VI ÄR I APPXOMP KONSTRUKTOR");
         selfAdr = init.selfAdr;
         logPrefix = "<nid:" + selfAdr.getId() + ">";
         LOG.info("{}initiating...", logPrefix);
@@ -60,9 +60,10 @@ public class TestComp extends ComponentDefinition {
         @Override
         public void handle(Start event) {
             LOG.info("{}starting...", logPrefix);
-            KHeader header = new BasicHeader(selfAdr, ScenarioSetup.getNodeAdr("193.0.0", 1), Transport.UDP);
+            KHeader header = new BasicHeader(selfAdr, ScenarioSetup.getNodeAdr("193.0.0.0", 1), Transport.UDP);
             KContentMsg msg = new BasicContentMsg(header, new Msg());
             trigger(msg, networkPort);
+            LOG.debug("Sent msg to network from " + selfAdr);
         }
     };
 

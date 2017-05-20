@@ -18,7 +18,7 @@ import java.util.Set;
  * Created by Amir on 2017-05-16.
  */
 public class CRBComp extends ComponentDefinition {
-    private static final Logger LOG = LoggerFactory.getLogger(CRBComp.class);
+    private static final Logger LOG = LoggerFactory.getLogger(CRBBroadcast.class);
 
     Set<KompicsEvent> delivered;
     Set<KompicsEvent> past;
@@ -28,27 +28,29 @@ public class CRBComp extends ComponentDefinition {
 
 
     public CRBComp(Init init){
-
+        LOG.info("ÄR i init i CRBComp");
+        LOG.debug("tjabababdbai");
         delivered = new HashSet<>();
         past = new HashSet<>();
         this.selfAdr = init.selfAdr;
+        LOG.debug("selfadr " + selfAdr);
 
         subscribe(handleDeliver, eagerPort);
         subscribe(handleBroadcast, crbPort);
 
     }
 
-    protected final Handler<CRBBroadcast> handleBroadcast = new Handler<CRBBroadcast>() {
+      Handler<CRBBroadcast> handleBroadcast = new Handler<CRBBroadcast>() {
         @Override
         public void handle(CRBBroadcast crbBroadcast) {
-            LOG.debug("VI ÄR I CRBBROADCAAAAAAASSSSSTSTST");
+            LOG.info("VI ÄR I CRBBROADCAAAAAAASSSSSTSTST");
             EagerBroadcast eagerBroadcast = new EagerBroadcast(crbBroadcast.msg, past);
             trigger(eagerBroadcast, eagerPort);
             past.add(crbBroadcast.msg);
         }
     };
 
-   protected final Handler<EagerDeliver> handleDeliver = new Handler<EagerDeliver>() {
+     Handler<EagerDeliver> handleDeliver = new Handler<EagerDeliver>() {
        @Override
        public void handle(EagerDeliver eagerDeliver) {
 

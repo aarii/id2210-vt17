@@ -29,6 +29,8 @@ import se.kth.app.test.Msg;
 import se.kth.croupier.util.CroupierHelper;
 import se.kth.app.test.Ping;
 import se.kth.app.test.Pong;
+import se.kth.eagerRB.EagerBroadcast;
+import se.kth.eagerRB.EagerPort;
 import se.sics.kompics.*;
 import se.sics.kompics.network.Network;
 import se.sics.kompics.network.Transport;
@@ -48,13 +50,15 @@ import se.sics.ktoolbox.util.network.basic.BasicHeader;
  */
 public class AppComp extends ComponentDefinition {
 
-  private static final Logger LOG = LoggerFactory.getLogger(BootstrapClientComp.class);
+  private static final Logger LOG = LoggerFactory.getLogger(AppComp.class);
   private String logPrefix = " ";
 
   //*******************************CONNECTIONS********************************
 
+  Positive<Timer> timer = requires(Timer.class);
   Positive<Network> networkPort = requires(Network.class);
   Positive<CRBPort> crbPort = requires(CRBPort.class);
+  Positive<EagerPort> eagerPort = requires(EagerPort.class);
   //**************************************************************************
   private KAddress selfAdr;
 
@@ -66,6 +70,7 @@ public class AppComp extends ComponentDefinition {
 
     subscribe(handleStart, control);
     subscribe(handleMsg, networkPort);
+    subscribe(handleCRBDeliver, crbPort);
   }
 
   Handler handleStart = new Handler<Start>() {
@@ -80,12 +85,15 @@ public class AppComp extends ComponentDefinition {
 
     @Override
     public void handle(Msg content, KContentMsg<?, ?, Msg> container) {
-      LOG.info("{}received crbDeliver from:{}", logPrefix, container.getHeader().getSource());
-      trigger(new CRBBroadcast(content, selfAdr), crbPort);
+      LOG.info("{}received Msg from:{}", logPrefix, container.getHeader().getSource());
+      LOG.info("selfAdr is:" + selfAdr);
+      //trigger(new CRBBroadcast(content, selfAdr), crbPort);
+      trigger (new EagerBroadcast(content, selfAdr), eagerPort);
+      LOG.info("sent crbbroadcast");
     }
   };
 
-  protected final Handler<CRBDeliver> handleBroadcast = new Handler<CRBDeliver>() {
+  protected final Handler<CRBDeliver> handleCRBDeliver = new Handler<CRBDeliver>() {
     @Override
     public void handle(CRBDeliver crbDeliver) {
       LOG.debug("VI ÄR I CRBDeliver i appcomp");
