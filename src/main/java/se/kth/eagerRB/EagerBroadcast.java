@@ -15,11 +15,6 @@ public class EagerBroadcast implements KompicsEvent {
    public Set<KompicsEvent> past;
 
 
-    public EagerBroadcast(KompicsEvent msg, KAddress kAddress){
-        this.address = kAddress;
-        this.msg = msg;
-    }
-
     public EagerBroadcast(KompicsEvent msg, Set<KompicsEvent> past){
         this.msg = msg;
         this.past = past;

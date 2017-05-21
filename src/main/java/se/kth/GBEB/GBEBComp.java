@@ -8,6 +8,7 @@ import se.kth.app.AppComp;
 import se.kth.app.test.Msg;
 import se.kth.app.test.TestComp;
 import se.kth.croupier.util.CroupierHelper;
+import se.kth.eagerRB.EagerBroadcast;
 import se.kth.eagerRB.EagerDeliver;
 import se.sics.kompics.*;
 import se.sics.kompics.network.Network;
@@ -21,6 +22,7 @@ import se.sics.ktoolbox.util.network.basic.BasicContentMsg;
 import se.sics.ktoolbox.util.network.basic.BasicHeader;
 import sun.rmi.runtime.Log;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -37,11 +39,13 @@ public class GBEBComp extends ComponentDefinition {
 
 
 
+    List<KompicsEvent> eventlist;
     KAddress selfAdr;
-    Set<KompicsEvent> past;
+     Set<KompicsEvent> past;
     public GBEBComp(Init init){
         this.selfAdr = init.selfAdr;
         past = new HashSet<>();
+        eventlist = new ArrayList<>();
 
         subscribe(broadcastHandler, gbebPort);
         subscribe(handleCroupierSample, croupierPort);
@@ -49,9 +53,6 @@ public class GBEBComp extends ComponentDefinition {
         subscribe(handleDeliverHistoryResponse, networkPort);
 
     }
-
-
-
 
     public final Handler<GBEBBroadcast> broadcastHandler = new Handler<GBEBBroadcast>() {
         @Override
@@ -95,27 +96,25 @@ public class GBEBComp extends ComponentDefinition {
        public void handle(HistoryResponse content, KContentMsg<?,?,HistoryResponse> context) {
 
            Set<KompicsEvent> unseen = Sets.symmetricDifference(content.past, past);
-           for(KompicsEvent msg : unseen){
+           List<KompicsEvent> unseenList = new ArrayList<>(unseen);
 
+           for(KompicsEvent ke : unseenlist){
+               GBEBDeliver gbebDeliver = new GBEBDeliver(ke, context.getHeader().getSource());
+               trigger(gbebDeliver, gbebPort);
+               past.add(ke);
+              //s eventlist.add(ke);
+           }
+
+
+        /*   LOG.debug("Storleken av unseen: " + unseen.size());
+           for(KompicsEvent msg : unseen){
                GBEBDeliver gbebDeliver = new GBEBDeliver(msg, context.getHeader().getSource());
                trigger(gbebDeliver, gbebPort);
                past.add(msg);
-           }
+           }*/
 
        }
    };
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

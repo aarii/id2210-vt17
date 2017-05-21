@@ -90,6 +90,7 @@ public class AppMngrComp extends ComponentDefinition {
   Handler handleCroupierConnected = new Handler<OMngrCroupier.ConnectResponse>() {
     @Override
     public void handle(OMngrCroupier.ConnectResponse event) {
+
       connectAppComp();
       trigger(Start.event, crbComp.control());
       trigger(Start.event, gbebComp.control());

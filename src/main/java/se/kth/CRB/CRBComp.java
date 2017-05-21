@@ -2,6 +2,7 @@ package se.kth.CRB;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import se.kth.GBEB.GBEBBroadcast;
 import se.kth.GBEB.GBEBDeliver;
 import se.kth.app.AppComp;
 import se.kth.app.test.Msg;
@@ -26,6 +27,7 @@ public class CRBComp extends ComponentDefinition {
     KAddress selfAdr;
     Positive<EagerPort> eagerPort = requires(EagerPort.class);
     Negative<CRBPort> crbPort = provides(CRBPort.class);
+    EagerBroadcast eagerBroadcast;
 
 
     public CRBComp(Init init){
@@ -46,9 +48,9 @@ public class CRBComp extends ComponentDefinition {
         public void handle(CRBBroadcast crbBroadcast) {
             LOG.info("Vi är i handleBroadcast");
             LOG.info("CRBComps address är " + selfAdr);
-            EagerBroadcast eagerBroadcast = new EagerBroadcast(crbBroadcast.msg, past);
+            EagerBroadcast eagerBroadcast = new EagerBroadcast(crbBroadcast, past);
             trigger(eagerBroadcast, eagerPort);
-            past.add(crbBroadcast.msg);
+            past.add(crbBroadcast);
         }
     };
 
@@ -56,27 +58,37 @@ public class CRBComp extends ComponentDefinition {
        @Override
        public void handle(EagerDeliver eagerDeliver) {
 
-            EagerBroadcast eagerBroadcast = (EagerBroadcast) eagerDeliver.msg;
+            GBEBBroadcast gbebBroadcast = (GBEBBroadcast) eagerDeliver.msg;
 
-           if(!delivered.contains(eagerDeliver.msg)){
-               for(KompicsEvent m : eagerBroadcast.past){
-                   if(!delivered.contains(m)){
-                       CRBDeliver crbDeliver = new CRBDeliver(m, eagerBroadcast.address);
-                        trigger(crbDeliver, crbPort);
-                        delivered.add(m);
-                   }
-                   if(!past.contains(m)){
-                       past.add(m);
-                   }
 
-               }
-               trigger(new CRBDeliver(eagerDeliver.msg, eagerDeliver.address), crbPort);
-               delivered.add(eagerDeliver.msg);
-               if(!past.contains(eagerDeliver.msg)){
-                   past.add(eagerDeliver.msg);
-               }
-           }
+            if(gbebBroadcast.msg instanceof EagerBroadcast) {
+                LOG.debug("HEHEHEH DET HÄR FUNKAR FÖRFAN");
+                eagerBroadcast = (EagerBroadcast) gbebBroadcast.msg;
+                LOG.debug("HEHEHEH OFTA FYFAN VAD GRYMT OM DET HÄR FUNKAR FÖRFAN");
+
+
+                if (!delivered.contains(eagerDeliver.msg)) {
+                    for (KompicsEvent m : eagerBroadcast.past) {
+                        if (!delivered.contains(m)) {
+                            CRBDeliver crbDeliver = new CRBDeliver(m, eagerBroadcast.address);
+                            trigger(crbDeliver, crbPort);
+                            delivered.add(m);
+                        }
+                        if (!past.contains(m)) {
+                            past.add(m);
+                        }
+
+                    }
+                    trigger(new CRBDeliver(eagerDeliver.msg, eagerDeliver.address), crbPort);
+                    delivered.add(eagerDeliver.msg);
+                    if (!past.contains(eagerDeliver.msg)) {
+                        past.add(eagerDeliver.msg);
+                    }
+                }
+            }
        }
+
+
    };
 
 

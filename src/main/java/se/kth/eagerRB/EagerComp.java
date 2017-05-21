@@ -50,6 +50,7 @@ public class EagerComp extends ComponentDefinition {
         @Override
         public void handle(GBEBDeliver gbebDeliver) {
 
+
             if(!delivered.contains(gbebDeliver.msg)){
                 delivered.add(gbebDeliver.msg);
                 EagerDeliver eagerDeliver = new EagerDeliver(gbebDeliver.msg, gbebDeliver.address);
