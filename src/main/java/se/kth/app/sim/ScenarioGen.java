@@ -20,6 +20,9 @@ package se.kth.app.sim;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import se.kth.app.AppComp;
 import se.kth.app.test.TestComp;
 import se.kth.sim.compatibility.SimNodeIdExtractor;
 import se.kth.system.HostMngrComp;
@@ -28,6 +31,7 @@ import se.sics.kompics.simulator.SimulationScenario;
 import se.sics.kompics.simulator.adaptor.Operation;
 import se.sics.kompics.simulator.adaptor.Operation1;
 import se.sics.kompics.simulator.adaptor.distributions.extra.BasicIntSequentialDistribution;
+import se.sics.kompics.simulator.events.system.KillNodeEvent;
 import se.sics.kompics.simulator.events.system.SetupEvent;
 import se.sics.kompics.simulator.events.system.StartNodeEvent;
 import se.sics.kompics.simulator.network.identifier.IdentifierExtractor;
@@ -38,6 +42,7 @@ import se.sics.ktoolbox.util.network.KAddress;
  * @author Alex Ormenisan <aaor@kth.se>
  */
 public class ScenarioGen {
+    private static final Logger LOG = LoggerFactory.getLogger(ScenarioGen.class);
 
     static Operation<SetupEvent> systemSetupOp = new Operation<SetupEvent>() {
         @Override
@@ -118,7 +123,33 @@ public class ScenarioGen {
             };
         }
     };
+/*TODO Set up nodes dying */
+    public static final Operation1 killNodeOp = new Operation1<KillNodeEvent, Integer>() {
+        @Override
+        public KillNodeEvent generate(final Integer nodeId) {
+            return new KillNodeEvent() {
+                KAddress selfAdr;
+                {
 
+                    String nodeIp = "193.0.0." + nodeId;
+                    selfAdr = ScenarioSetup.getNodeAdr(nodeIp, nodeId);
+                    LOG.info("Node {} was killed", nodeId);
+
+                }
+
+
+                @Override
+                public Address getNodeAddress() {
+                    return selfAdr;
+                }
+
+                @Override
+                public String toString() {
+                    return "KillServer<" + selfAdr.toString() + ">";
+                }
+            };
+        }
+    };
 
     static Operation1<StartNodeEvent, Integer> startTestCompOp = new Operation1<StartNodeEvent, Integer>() {
 
@@ -129,6 +160,7 @@ public class ScenarioGen {
 
                 {
                     selfAdr = ScenarioSetup.getNodeAdr("193.0.0", nodeId);
+
                 }
 
                 @Override
@@ -151,7 +183,7 @@ public class ScenarioGen {
 
 
 
-    public static SimulationScenario simpleBoot() {
+    public static SimulationScenario simpleSimulation() {
         SimulationScenario scen = new SimulationScenario() {
             {
                 StochasticProcess systemSetup = new StochasticProcess() {
@@ -169,7 +201,7 @@ public class ScenarioGen {
                 StochasticProcess startPeers = new StochasticProcess() {
                     {
                         eventInterArrivalTime(uniform(1000, 1100));
-                        raise(100, startNodeOp, new BasicIntSequentialDistribution(1));
+                        raise(5, startNodeOp, new BasicIntSequentialDistribution(1));
                     }
                 };
                 StochasticProcess startTestComp = new StochasticProcess() {
@@ -179,11 +211,65 @@ public class ScenarioGen {
                     }
                 };
 
+                StochasticProcess startKillNode = new StochasticProcess() {
+                    {
+                        eventInterArrivalTime(uniform(1000, 1100));
+                        raise(1, killNodeOp, new BasicIntSequentialDistribution(2));
+                    }
+                };
+
                 systemSetup.start();
                 startBootstrapServer.startAfterTerminationOf(1000, systemSetup);
                 startPeers.startAfterTerminationOf(1000, startBootstrapServer);
                 startTestComp.startAfterStartOf(100, startPeers);
-                terminateAfterTerminationOf(1000*1000, startTestComp);
+                terminateAfterTerminationOf(10000, startTestComp);
+            }
+        };
+
+        return scen;
+    }
+
+    public static SimulationScenario simpleKillNodeSimulation() {
+        SimulationScenario scen = new SimulationScenario() {
+            {
+                StochasticProcess systemSetup = new StochasticProcess() {
+                    {
+                        eventInterArrivalTime(constant(1000));
+                        raise(1, systemSetupOp);
+                    }
+                };
+                StochasticProcess startBootstrapServer = new StochasticProcess() {
+                    {
+                        eventInterArrivalTime(constant(1000));
+                        raise(1, startBootstrapServerOp);
+                    }
+                };
+                StochasticProcess startPeers = new StochasticProcess() {
+                    {
+                        eventInterArrivalTime(uniform(1000, 1100));
+                        raise(5, startNodeOp, new BasicIntSequentialDistribution(1));
+                    }
+                };
+                StochasticProcess startTestComp = new StochasticProcess() {
+                    {
+                        eventInterArrivalTime(uniform(1000, 1100));
+                        raise(100, startTestCompOp, new BasicIntSequentialDistribution(1));
+                    }
+                };
+
+                StochasticProcess startKillNode = new StochasticProcess() {
+                    {
+                        eventInterArrivalTime(uniform(1000, 1100));
+                        raise(1, killNodeOp, new BasicIntSequentialDistribution(2));
+                    }
+                };
+
+                systemSetup.start();
+                startBootstrapServer.startAfterTerminationOf(1000, systemSetup);
+                startPeers.startAfterTerminationOf(1000, startBootstrapServer);
+                startTestComp.startAfterStartOf(100, startPeers);
+                startKillNode.startAfterStartOf(1000,startTestComp);
+                terminateAfterTerminationOf(10000, startKillNode);
             }
         };
 

@@ -42,7 +42,6 @@ public class EagerComp extends ComponentDefinition {
         public void handle(EagerBroadcast eagerBroadcast) {
             GBEBBroadcast gbebBroadcast = new GBEBBroadcast(eagerBroadcast, selfAdr);
             trigger(gbebBroadcast, gbebPort);
-            LOG.info("Received EagerBroadcast from:" + eagerBroadcast.address);
         }
     };
 

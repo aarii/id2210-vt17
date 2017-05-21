@@ -31,7 +31,6 @@ public class CRBComp extends ComponentDefinition {
 
 
     public CRBComp(Init init){
-        LOG.info("Är i init i CRBComp");
         delivered = new HashSet<>();
         past = new HashSet<>();
         this.selfAdr = init.selfAdr;
@@ -39,15 +38,12 @@ public class CRBComp extends ComponentDefinition {
 
         subscribe(handleDeliver, eagerPort);
         subscribe(handleBroadcast, crbPort);
-        LOG.info("Är i CRBComp och är efter subscribat handler");
 
     }
 
       Handler<CRBBroadcast> handleBroadcast = new Handler<CRBBroadcast>() {
         @Override
         public void handle(CRBBroadcast crbBroadcast) {
-            LOG.info("Vi är i handleBroadcast");
-            LOG.info("CRBComps address är " + selfAdr);
             EagerBroadcast eagerBroadcast = new EagerBroadcast(crbBroadcast, past);
             trigger(eagerBroadcast, eagerPort);
             past.add(crbBroadcast);
@@ -61,18 +57,22 @@ public class CRBComp extends ComponentDefinition {
             GBEBBroadcast gbebBroadcast = (GBEBBroadcast) eagerDeliver.msg;
 
 
+
             if(gbebBroadcast.msg instanceof EagerBroadcast) {
-                LOG.debug("HEHEHEH DET HÄR FUNKAR FÖRFAN");
                 eagerBroadcast = (EagerBroadcast) gbebBroadcast.msg;
-                LOG.debug("HEHEHEH OFTA FYFAN VAD GRYMT OM DET HÄR FUNKAR FÖRFAN");
 
 
                 if (!delivered.contains(eagerDeliver.msg)) {
+
+
                     for (KompicsEvent m : eagerBroadcast.past) {
                         if (!delivered.contains(m)) {
+
+
                             CRBDeliver crbDeliver = new CRBDeliver(m, eagerBroadcast.address);
                             trigger(crbDeliver, crbPort);
                             delivered.add(m);
+
                         }
                         if (!past.contains(m)) {
                             past.add(m);
@@ -80,6 +80,7 @@ public class CRBComp extends ComponentDefinition {
 
                     }
                     trigger(new CRBDeliver(eagerDeliver.msg, eagerDeliver.address), crbPort);
+
                     delivered.add(eagerDeliver.msg);
                     if (!past.contains(eagerDeliver.msg)) {
                         past.add(eagerDeliver.msg);

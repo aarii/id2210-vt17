@@ -58,7 +58,7 @@ public class GBEBComp extends ComponentDefinition {
         @Override
         public void handle(GBEBBroadcast gbebBroadcast) {
             past.add(gbebBroadcast);
-            LOG.debug("added to my past in GBEBBroadcast");
+           // LOG.debug("added to my past in GBEBBroadcast");
 
         }
     };
@@ -75,7 +75,7 @@ public class GBEBComp extends ComponentDefinition {
                 KHeader header = new BasicHeader(selfAdr, peer, Transport.UDP);
                 KContentMsg msg = new BasicContentMsg(header, new HistoryRequest());
                 trigger(msg, networkPort);
-                LOG.debug("Received CroupierSample" + sample);
+              //  LOG.debug("Received CroupierSample" + sample);
             }
         }
     };
@@ -98,7 +98,7 @@ public class GBEBComp extends ComponentDefinition {
            Set<KompicsEvent> unseen = Sets.symmetricDifference(content.past, past);
            List<KompicsEvent> unseenList = new ArrayList<>(unseen);
 
-           for(KompicsEvent ke : unseenlist){
+           for(KompicsEvent ke : unseenList){
                GBEBDeliver gbebDeliver = new GBEBDeliver(ke, context.getHeader().getSource());
                trigger(gbebDeliver, gbebPort);
                past.add(ke);
@@ -106,12 +106,6 @@ public class GBEBComp extends ComponentDefinition {
            }
 
 
-        /*   LOG.debug("Storleken av unseen: " + unseen.size());
-           for(KompicsEvent msg : unseen){
-               GBEBDeliver gbebDeliver = new GBEBDeliver(msg, context.getHeader().getSource());
-               trigger(gbebDeliver, gbebPort);
-               past.add(msg);
-           }*/
 
        }
    };

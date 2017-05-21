@@ -59,7 +59,6 @@ public class AppComp extends ComponentDefinition {
   Positive<Timer> timer = requires(Timer.class);
   Positive<Network> networkPort = requires(Network.class);
   Positive<CRBPort> crbPort = requires(CRBPort.class);
-  Positive<EagerPort> eagerPort = requires(EagerPort.class);
   //**************************************************************************
   private KAddress selfAdr;
 
@@ -89,14 +88,13 @@ public class AppComp extends ComponentDefinition {
       LOG.info("selfAdr is:" + selfAdr);
       trigger(new CRBBroadcast(content, selfAdr), crbPort);
 
-      LOG.info("sent crbbroadcast");
     }
   };
 
   protected final Handler<CRBDeliver> handleCRBDeliver = new Handler<CRBDeliver>() {
     @Override
     public void handle(CRBDeliver crbDeliver) {
-      LOG.debug("VI ÄR I CRBDeliver i appcomp");
+      LOG.info("I am node " + selfAdr);
     }
   };
 
