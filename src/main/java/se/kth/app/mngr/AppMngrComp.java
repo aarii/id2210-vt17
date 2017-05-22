@@ -67,7 +67,7 @@ public class AppMngrComp extends ComponentDefinition {
   public AppMngrComp(Init init) {
     selfAdr = init.selfAdr;
     logPrefix = "<nid:" + selfAdr.getId() + ">";
-    LOG.info("{}initiating...", logPrefix);
+  //  LOG.info("{}initiating...", logPrefix);
 
     extPorts = init.extPorts;
     croupierId = init.croupierOId;
@@ -80,7 +80,7 @@ public class AppMngrComp extends ComponentDefinition {
   Handler handleStart = new Handler<Start>() {
     @Override
     public void handle(Start event) {
-      LOG.info("{}starting...", logPrefix);
+     // LOG.info("{}starting...", logPrefix);
 
       pendingCroupierConnReq = new OMngrCroupier.ConnectRequest(croupierId, false);
       trigger(pendingCroupierConnReq, omngrPort);
@@ -97,7 +97,7 @@ public class AppMngrComp extends ComponentDefinition {
       trigger(Start.event, eagerComp.control());
       trigger(Start.event, appComp.control());
       trigger(new OverlayViewUpdate.Indication<>(croupierId, false, new NoView()), extPorts.viewUpdatePort);
-      LOG.info("{}overlays connected", logPrefix);
+  //    LOG.info("{}overlays connected", logPrefix);
 
     }
   };
@@ -107,7 +107,7 @@ public class AppMngrComp extends ComponentDefinition {
     eagerComp = create(EagerComp.class, new EagerComp.Init(selfAdr));
     crbComp = create(CRBComp.class, new CRBComp.Init(selfAdr));
     appComp = create(AppComp.class, new AppComp.Init(selfAdr, croupierId));
-    testComp = create(TestComp.class, new TestComp.Init(selfAdr));
+    testComp = create(TestComp.class, new TestComp.Init(selfAdr, 0));
 
     connect(testComp.getNegative(Network.class), extPorts.networkPort, Channel.TWO_WAY);
     connect(appComp.getNegative(Network.class), extPorts.networkPort, Channel.TWO_WAY);

@@ -95,6 +95,8 @@ public class ScenarioGen {
 
                     String nodeIp = "193.0.0." + nodeId;
                     selfAdr = ScenarioSetup.getNodeAdr(nodeIp, nodeId);
+                    LOG.info("Node {} has been started", nodeId);
+
                 }
 
                 @Override
@@ -161,6 +163,7 @@ public class ScenarioGen {
                 {
                     selfAdr = ScenarioSetup.getNodeAdr("193.0.0", nodeId);
 
+
                 }
 
                 @Override
@@ -175,7 +178,7 @@ public class ScenarioGen {
 
                 @Override
                 public TestComp.Init getComponentInit() {
-                    return new TestComp.Init(selfAdr);
+                    return new TestComp.Init(selfAdr, nodeId);
                 }
             };
         }
@@ -269,10 +272,69 @@ public class ScenarioGen {
                 startPeers.startAfterTerminationOf(1000, startBootstrapServer);
                 startTestComp.startAfterStartOf(100, startPeers);
                 startKillNode.startAfterStartOf(1000,startTestComp);
+
                 terminateAfterTerminationOf(10000, startKillNode);
             }
         };
 
         return scen;
     }
+
+    public static SimulationScenario simpleKillReviveNodeSimulation() {
+        SimulationScenario scen = new SimulationScenario() {
+            {
+                StochasticProcess systemSetup = new StochasticProcess() {
+                    {
+                        eventInterArrivalTime(constant(1000));
+                        raise(1, systemSetupOp);
+                    }
+                };
+                StochasticProcess startBootstrapServer = new StochasticProcess() {
+                    {
+                        eventInterArrivalTime(constant(1000));
+                        raise(1, startBootstrapServerOp);
+                    }
+                };
+                StochasticProcess startPeers = new StochasticProcess() {
+                    {
+                        eventInterArrivalTime(uniform(1000, 1100));
+                        raise(5, startNodeOp, new BasicIntSequentialDistribution(1));
+                    }
+                };
+                StochasticProcess startTestComp = new StochasticProcess() {
+                    {
+                        eventInterArrivalTime(uniform(1000, 1100));
+                        raise(2, startTestCompOp, new BasicIntSequentialDistribution(0));
+                    }
+                };
+
+                StochasticProcess startKillNode = new StochasticProcess() {
+                    {
+                        eventInterArrivalTime(uniform(1000, 1100));
+                        raise(1, killNodeOp, new BasicIntSequentialDistribution(1));
+                    }
+                };
+
+
+                StochasticProcess startReviveNode = new StochasticProcess() {
+                    {
+                        eventInterArrivalTime(uniform(1000, 1100));
+                        raise(1, startNodeOp, new BasicIntSequentialDistribution(1));
+
+                    }
+                };
+
+                systemSetup.start();
+                startBootstrapServer.startAfterTerminationOf(1000, systemSetup);
+                startPeers.startAfterTerminationOf(1000, startBootstrapServer);
+                startTestComp.startAfterStartOf(100, startPeers);
+                startKillNode.startAfterStartOf(5000,startTestComp);
+                startReviveNode.startAfterStartOf(5000, startKillNode);
+                terminateAfterTerminationOf(5000, startReviveNode);
+            }
+        };
+
+        return scen;
+    }
+
 }

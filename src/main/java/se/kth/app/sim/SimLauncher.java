@@ -29,7 +29,11 @@ public class SimLauncher {
         //SimulationScenario simpleSimulationScenario = ScenarioGen.simpleSimulation();
         //simpleSimulationScenario.simulate(LauncherComp.class);
 
-         SimulationScenario simpleKillNodeScenario = ScenarioGen.simpleKillNodeSimulation();
-        simpleKillNodeScenario.simulate(LauncherComp.class);
+        // SimulationScenario simpleKillNodeScenario = ScenarioGen.simpleKillNodeSimulation();
+        //simpleKillNodeScenario.simulate(LauncherComp.class);
+
+        SimulationScenario simpleReviveNodeScenario = ScenarioGen.simpleKillReviveNodeSimulation();
+        simpleReviveNodeScenario.simulate(LauncherComp.class);
+
     }
 }

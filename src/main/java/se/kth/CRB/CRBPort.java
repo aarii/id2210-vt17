@@ -1,9 +1,7 @@
 package se.kth.CRB;
 
-import se.kth.app.test.Msg;
 import se.kth.eagerRB.EagerBroadcast;
 import se.kth.eagerRB.EagerDeliver;
-import se.sics.kompics.KompicsEvent;
 import se.sics.kompics.PortType;
 
 /**

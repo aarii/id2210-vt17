@@ -3,14 +3,11 @@ package se.kth.CRB;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import se.kth.GBEB.GBEBBroadcast;
-import se.kth.GBEB.GBEBDeliver;
-import se.kth.app.AppComp;
-import se.kth.app.test.Msg;
+import se.kth.app.test.Operation;
 import se.kth.eagerRB.EagerBroadcast;
 import se.kth.eagerRB.EagerDeliver;
 import se.kth.eagerRB.EagerPort;
 import se.sics.kompics.*;
-import se.sics.ktoolbox.omngr.bootstrap.BootstrapClientComp;
 import se.sics.ktoolbox.util.network.KAddress;
 
 import java.util.HashSet;
@@ -27,14 +24,12 @@ public class CRBComp extends ComponentDefinition {
     KAddress selfAdr;
     Positive<EagerPort> eagerPort = requires(EagerPort.class);
     Negative<CRBPort> crbPort = provides(CRBPort.class);
-    EagerBroadcast eagerBroadcast;
 
 
     public CRBComp(Init init){
         delivered = new HashSet<>();
         past = new HashSet<>();
         this.selfAdr = init.selfAdr;
-        LOG.debug("selfadr " + selfAdr);
 
         subscribe(handleDeliver, eagerPort);
         subscribe(handleBroadcast, crbPort);
@@ -45,8 +40,10 @@ public class CRBComp extends ComponentDefinition {
         @Override
         public void handle(CRBBroadcast crbBroadcast) {
             EagerBroadcast eagerBroadcast = new EagerBroadcast(crbBroadcast, past);
+            System.out.println("EagerBroadcast är " + eagerBroadcast +" med msg " + eagerBroadcast.msg);
+
             trigger(eagerBroadcast, eagerPort);
-            past.add(crbBroadcast);
+            past.add(eagerBroadcast);
         }
     };
 
@@ -54,42 +51,42 @@ public class CRBComp extends ComponentDefinition {
        @Override
        public void handle(EagerDeliver eagerDeliver) {
 
-            GBEBBroadcast gbebBroadcast = (GBEBBroadcast) eagerDeliver.msg;
+            if(eagerDeliver.msg instanceof EagerBroadcast) {
 
+                EagerBroadcast eagerBroadcast =  (EagerBroadcast) eagerDeliver.msg;
+                CRBBroadcast  crbBroadcast = (CRBBroadcast) eagerBroadcast.msg;
+                Operation operation = (Operation) crbBroadcast.msg;
+                    LOG.debug("Past i eagerdeliver är " + eagerBroadcast.past);
+                LOG.debug("vår past " + past);
 
-
-            if(gbebBroadcast.msg instanceof EagerBroadcast) {
-                eagerBroadcast = (EagerBroadcast) gbebBroadcast.msg;
-
-
-                if (!delivered.contains(eagerDeliver.msg)) {
-
+                if (!delivered.contains(eagerBroadcast)) {
 
                     for (KompicsEvent m : eagerBroadcast.past) {
+                      //  System.out.println("M är: " + m);
                         if (!delivered.contains(m)) {
-
-
-                            CRBDeliver crbDeliver = new CRBDeliver(m, eagerBroadcast.address);
+                            System.out.println("operation i crbcomp är" + operation.op);
+                            CRBDeliver crbDeliver = new CRBDeliver(operation, eagerBroadcast.address);
                             trigger(crbDeliver, crbPort);
                             delivered.add(m);
-
                         }
+
                         if (!past.contains(m)) {
                             past.add(m);
                         }
 
-                    }
-                    trigger(new CRBDeliver(eagerDeliver.msg, eagerDeliver.address), crbPort);
 
-                    delivered.add(eagerDeliver.msg);
-                    if (!past.contains(eagerDeliver.msg)) {
-                        past.add(eagerDeliver.msg);
+                    }
+                    if(!delivered.contains(((EagerBroadcast) eagerDeliver.msg).msg)) {
+                        LOG.debug("i den andra ifen past " + past);
+                        trigger(new CRBDeliver(((EagerBroadcast) eagerDeliver.msg).msg, eagerDeliver.address), crbPort);
+                        delivered.add(((EagerBroadcast) eagerDeliver.msg).msg);
+                        if (!past.contains(((EagerBroadcast) eagerDeliver.msg).msg)) {
+                            past.add(((EagerBroadcast) eagerDeliver.msg).msg);
+                        }
                     }
                 }
             }
        }
-
-
    };
 
 

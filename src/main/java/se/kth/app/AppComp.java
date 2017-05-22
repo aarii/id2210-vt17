@@ -17,34 +17,24 @@
  */
 package se.kth.app;
 
-import java.util.List;
-import java.util.regex.PatternSyntaxException;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import se.kth.CRB.CRBBroadcast;
 import se.kth.CRB.CRBDeliver;
 import se.kth.CRB.CRBPort;
-import se.kth.app.sim.ScenarioSetup;
-import se.kth.app.test.Msg;
-import se.kth.croupier.util.CroupierHelper;
-import se.kth.app.test.Ping;
-import se.kth.app.test.Pong;
+import se.kth.GBEB.GBEBBroadcast;
+import se.kth.GBEB.GBEBDeliver;
+import se.kth.app.sets.TwoPSet;
+import se.kth.app.test.Operation;
 import se.kth.eagerRB.EagerBroadcast;
-import se.kth.eagerRB.EagerPort;
+import se.kth.eagerRB.EagerDeliver;
 import se.sics.kompics.*;
 import se.sics.kompics.network.Network;
-import se.sics.kompics.network.Transport;
 import se.sics.kompics.timer.Timer;
-import se.sics.ktoolbox.croupier.CroupierPort;
-import se.sics.ktoolbox.croupier.event.CroupierSample;
-import se.sics.ktoolbox.omngr.bootstrap.BootstrapClientComp;
 import se.sics.ktoolbox.util.identifiable.Identifier;
 import se.sics.ktoolbox.util.network.KAddress;
 import se.sics.ktoolbox.util.network.KContentMsg;
-import se.sics.ktoolbox.util.network.KHeader;
-import se.sics.ktoolbox.util.network.basic.BasicContentMsg;
-import se.sics.ktoolbox.util.network.basic.BasicHeader;
+import sun.rmi.runtime.Log;
 
 /**
  * @author Alex Ormenisan <aaor@kth.se>
@@ -56,16 +46,16 @@ public class AppComp extends ComponentDefinition {
 
   //*******************************CONNECTIONS********************************
 
-  Positive<Timer> timer = requires(Timer.class);
   Positive<Network> networkPort = requires(Network.class);
   Positive<CRBPort> crbPort = requires(CRBPort.class);
   //**************************************************************************
   private KAddress selfAdr;
+  TwoPSet twoPSet = new TwoPSet();
 
   public AppComp(Init init) {
     selfAdr = init.selfAdr;
     logPrefix = "<nid:" + selfAdr.getId() + ">";
-    LOG.info("{}initiating...", logPrefix);
+    // LOG.info("{}initiating...", logPrefix);
 
     subscribe(handleStart, control);
     subscribe(handleMsg, networkPort);
@@ -75,18 +65,35 @@ public class AppComp extends ComponentDefinition {
   Handler handleStart = new Handler<Start>() {
     @Override
     public void handle(Start event) {
-      LOG.info("{}starting...", logPrefix);
+      //  LOG.info("{}starting...", logPrefix);
     }
   };
 
 
-  ClassMatchedHandler handleMsg = new ClassMatchedHandler<Msg, KContentMsg<?, ?, Msg>>() {
+  ClassMatchedHandler handleMsg = new ClassMatchedHandler<Operation, KContentMsg<?, ?, Operation>>() {
 
     @Override
-    public void handle(Msg content, KContentMsg<?, ?, Msg> container) {
-      LOG.info("{}received Msg from:{}", logPrefix, container.getHeader().getSource());
-      LOG.info("selfAdr is:" + selfAdr);
-      trigger(new CRBBroadcast(content, selfAdr), crbPort);
+    public void handle(Operation operation, KContentMsg<?, ?, Operation> container) {
+      LOG.info(" Node {} received the Operation event {} from TestComp with address: {}", selfAdr.getId(), operation.op, container.getHeader().getSource());
+      //  LOG.info("selfAdr is:" + selfAdr);
+
+      if(operation.op.equalsIgnoreCase("ADD")){
+        twoPSet.gset.addElement(operation);
+
+      }
+
+      if(operation.op.equalsIgnoreCase("RM")){
+        twoPSet.removeElement(operation);
+
+      }
+
+      if(operation.op.equalsIgnoreCase("LOOKUP")){
+
+      }
+      System.out.println("Operation är " + operation + " med op " + operation.op + " med value " + operation.value);
+      trigger(new CRBBroadcast(operation, selfAdr), crbPort);
+
+
 
     }
   };
@@ -94,7 +101,31 @@ public class AppComp extends ComponentDefinition {
   protected final Handler<CRBDeliver> handleCRBDeliver = new Handler<CRBDeliver>() {
     @Override
     public void handle(CRBDeliver crbDeliver) {
-      LOG.info("I am node " + selfAdr);
+
+      System.out.println("HEEELLLOOOOOOOOOOO " + crbDeliver.msg);
+      if(crbDeliver.msg instanceof Operation){
+
+        Operation operation = ((Operation) crbDeliver.msg);
+        LOG.debug("VÅR OPERATION I CRBDELIVER ÄR: " + operation.op + " MED VALUE " + operation.value);
+
+        if(operation.op.equalsIgnoreCase("ADD")){
+          LOG.info("Node {} received an ADD operation with value {}" , selfAdr.getId(), operation.value);
+          twoPSet.gset.addElement(operation);
+
+        }
+
+        if(operation.op.equalsIgnoreCase("RM")){
+          LOG.info("Node {} received an RM operation with value {}" , selfAdr.getId(), operation.value);
+          twoPSet.removeElement(operation);
+
+        }
+
+        if(operation.op.equalsIgnoreCase("LOOKUP")){
+
+        }
+        System.out.println("VÅRT SET INNEHÅLLER " + twoPSet.gset);
+
+      }
     }
   };
 

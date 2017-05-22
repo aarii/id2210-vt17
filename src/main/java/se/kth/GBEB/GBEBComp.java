@@ -3,13 +3,7 @@ package se.kth.GBEB;
 import com.google.common.collect.Sets;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import se.kth.CRB.CRBBroadcast;
-import se.kth.app.AppComp;
-import se.kth.app.test.Msg;
-import se.kth.app.test.TestComp;
 import se.kth.croupier.util.CroupierHelper;
-import se.kth.eagerRB.EagerBroadcast;
-import se.kth.eagerRB.EagerDeliver;
 import se.sics.kompics.*;
 import se.sics.kompics.network.Network;
 import se.sics.kompics.network.Transport;
@@ -20,7 +14,6 @@ import se.sics.ktoolbox.util.network.KContentMsg;
 import se.sics.ktoolbox.util.network.KHeader;
 import se.sics.ktoolbox.util.network.basic.BasicContentMsg;
 import se.sics.ktoolbox.util.network.basic.BasicHeader;
-import sun.rmi.runtime.Log;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -57,8 +50,10 @@ public class GBEBComp extends ComponentDefinition {
     public final Handler<GBEBBroadcast> broadcastHandler = new Handler<GBEBBroadcast>() {
         @Override
         public void handle(GBEBBroadcast gbebBroadcast) {
-            past.add(gbebBroadcast);
-           // LOG.debug("added to my past in GBEBBroadcast");
+            System.out.println("i GBEBbroadcast är " + gbebBroadcast +" med msg " + gbebBroadcast.msg);
+
+            past.add(gbebBroadcast.msg);
+            LOG.debug("mypast is: " + past);
 
         }
     };
@@ -75,7 +70,7 @@ public class GBEBComp extends ComponentDefinition {
                 KHeader header = new BasicHeader(selfAdr, peer, Transport.UDP);
                 KContentMsg msg = new BasicContentMsg(header, new HistoryRequest());
                 trigger(msg, networkPort);
-              //  LOG.debug("Received CroupierSample" + sample);
+               //LOG.debug("Received CroupierSample" + sample);
             }
         }
     };
@@ -102,7 +97,6 @@ public class GBEBComp extends ComponentDefinition {
                GBEBDeliver gbebDeliver = new GBEBDeliver(ke, context.getHeader().getSource());
                trigger(gbebDeliver, gbebPort);
                past.add(ke);
-              //s eventlist.add(ke);
            }
 
 
