@@ -35,9 +35,7 @@ public class GSet {
     public Object getElement(int index){
 
         if(set.size() >= index) {
-
             return set.get(index);
-
         }
 
         return null;

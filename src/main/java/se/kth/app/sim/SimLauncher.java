@@ -26,10 +26,11 @@ import se.sics.kompics.simulator.run.LauncherComp;
 public class SimLauncher {
     public static void main(String[] args) {
         SimulationScenario.setSeed(ScenarioSetup.scenarioSeed);
+
         //SimulationScenario simpleSimulationScenario = ScenarioGen.simpleSimulation();
         //simpleSimulationScenario.simulate(LauncherComp.class);
 
-        // SimulationScenario simpleKillNodeScenario = ScenarioGen.simpleKillNodeSimulation();
+        //SimulationScenario simpleKillNodeScenario = ScenarioGen.simpleKillNodeSimulation();
         //simpleKillNodeScenario.simulate(LauncherComp.class);
 
         SimulationScenario simpleReviveNodeScenario = ScenarioGen.simpleKillReviveNodeSimulation();

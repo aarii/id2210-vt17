@@ -4,6 +4,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import se.kth.app.AppComp;
 import se.kth.app.test.Operation;
+import se.sics.ktoolbox.util.identifiable.Identifier;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,32 +24,31 @@ public class TwoPSet {
         tombstoneset = new GSet(new ArrayList<Object>());
     }
 
-    public void removeElement(Object obj){
-        System.out.println("gset innehåller: " + gset + " obj är " + obj);
-        for(Object s : gset.set){
-            System.out.println("OBj i gset är " + s);
+    public void removeElement(Object obj, Identifier id){
 
-        }
         if(gset.contains(obj)){
             System.out.println();
             tombstoneset.addElement(obj);
+            LOG.debug("Node {} removed the object {}", id, obj);
         }else{
             LOG.info("Object " + obj + " does not exist");
         }
 
+
+
     }
 
 
-    public void addElement(Object obj){
+    public void addElement(Object obj, Identifier id){
         gset.addElement(obj);
+
+            LOG.debug("Node {} added the object {}", id, obj);
 
     }
 
 
 
     public void printSetContent(GSet set){
-
-
 
     }
 }

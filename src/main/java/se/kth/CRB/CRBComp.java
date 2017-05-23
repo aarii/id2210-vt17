@@ -39,9 +39,11 @@ public class CRBComp extends ComponentDefinition {
       Handler<CRBBroadcast> handleBroadcast = new Handler<CRBBroadcast>() {
         @Override
         public void handle(CRBBroadcast crbBroadcast) {
-            LOG.debug("CRBBROadcast: " + crbBroadcast);
-            EagerBroadcast eagerBroadcast = new EagerBroadcast(crbBroadcast, past);
-            System.out.println("EagerBroadcast är " + eagerBroadcast +" med msg " + eagerBroadcast.msg);
+           // LOG.debug("CRBBROadcast: " + crbBroadcast);
+            Set pastCpy = new HashSet();
+            pastCpy.addAll(past);
+            EagerBroadcast eagerBroadcast = new EagerBroadcast(crbBroadcast, pastCpy);
+           // System.out.println("EagerBroadcast är " + eagerBroadcast +" med msg " + eagerBroadcast.msg);
 
             trigger(eagerBroadcast, eagerPort);
             past.add(eagerBroadcast);
@@ -59,36 +61,44 @@ public class CRBComp extends ComponentDefinition {
                 Operation operation = (Operation) crbBroadcast.msg;
                // LOG.debug("EagerBroadcast: " + eagerBroadcast);
                // LOG.debug("CRBBroadcast: " + crbBroadcast);
-                LOG.debug("Operation: " + operation.op);
-               // LOG.debug("Delivered innan " + delivered);
+              //  LOG.debug("Node " + selfAdr.getId() +"Operation: " + operation.op);
+              //  LOG.debug("Node "+ selfAdr.getId()+ " Delivered innan " + delivered);
                 if (!delivered.contains(eagerBroadcast)) {
-                    LOG.debug("Operation1: " + operation.op);
+                     // LOG.debug("Node " + selfAdr.getId() +"Operation1: " + operation.op);
 
                     for (KompicsEvent m : eagerBroadcast.past) {
-                      //  System.out.println("M är: " + m);
+                        EagerBroadcast eagerBroadcast1 = (EagerBroadcast) m;
+                        CRBBroadcast crbBroadcast1 = (CRBBroadcast) eagerBroadcast1.msg;
+                        Operation operation1 = (Operation) crbBroadcast1.msg;
+                       // System.out.println("Node "+ selfAdr.getId()+  " M är: " + m);
                         if (!delivered.contains(m)) {
-                            CRBDeliver crbDeliver = new CRBDeliver(operation, selfAdr);
+                         //  System.out.println("Node " + selfAdr.getId() +"!delivered.contains(m)");
+
+                            CRBDeliver crbDeliver = new CRBDeliver(operation1, selfAdr);
 
                             trigger(crbDeliver, crbPort);
+                          //  System.out.println("Har skickat triggern NU");
                             delivered.add(m);
                         }
 
                         if (!past.contains(m)) {
+                       //     System.out.println("!past.contains(m)");
                             past.add(m);
                         }
 
-
                     }
-                 //   LOG.debug("Delivered mellan if: " + delivered);
+
+                   // LOG.debug("Node " + selfAdr.getId() +"Delivered mellan if: " + delivered);
                     if(!delivered.contains(((EagerBroadcast) eagerDeliver.msg))) {
-                     //   LOG.debug("i den andra ifen past " + past);
-                        trigger(new CRBDeliver(((EagerBroadcast) eagerDeliver.msg).msg, eagerDeliver.address), crbPort);
+                       // LOG.debug("Node " + selfAdr.getId() + " i den andra ifen eagerbroadcast är är " + eagerBroadcast);
+
+                        trigger(new CRBDeliver(operation, eagerDeliver.address), crbPort);
                         delivered.add((eagerDeliver.msg));
                         if (!past.contains((eagerDeliver.msg))) {
                             past.add((eagerDeliver.msg));
                         }
                     }
-                 //   LOG.debug("Delivered efter ifsen: " + delivered);
+                   // LOG.debug( "Node "+ selfAdr.getId()+ "Delivered efter ifsen: " + delivered);
                 }
             }
        }

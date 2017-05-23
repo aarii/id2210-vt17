@@ -36,7 +36,7 @@ public class TestComp extends ComponentDefinition {
         selfAdr = init.selfAdr;
         op = init.op;
         logPrefix = "<nid:" + selfAdr.getId() + ">";
-    //    LOG.info("{}initiating...", logPrefix);
+        //    LOG.info("{}initiating...", logPrefix);
 
         subscribe(handleStart, control);
 
@@ -45,19 +45,50 @@ public class TestComp extends ComponentDefinition {
     Handler handleStart = new Handler<Start>() {
         @Override
         public void handle(Start event) {
-     //       LOG.info("{}starting...", logPrefix);
-            LOG.info("op är " + op);
+            //Simulation 2pSet
             if(op == 0) {
                 KHeader header = new BasicHeader(selfAdr, ScenarioSetup.getNodeAdr("193.0.0.1", 1), Transport.UDP);
                 KContentMsg msg = new BasicContentMsg(header, new Operation("ADD", 1337));
                 trigger(msg, networkPort);
             }
+
+            if(op == 1){
+                KHeader header1 = new BasicHeader(selfAdr, ScenarioSetup.getNodeAdr("193.0.0.1", 1), Transport.UDP);
+                KContentMsg msg1 = new BasicContentMsg(header1, new Operation("ADD", 1338));
+                trigger(msg1, networkPort);
+            }
             //      LOG.debug("Sent msg to network to " + ScenarioSetup.getNodeAdr("193.0.0.1", 1) + " i am " + selfAdr);
-          if(op == 1) {
-               KHeader header1 = new BasicHeader(selfAdr, ScenarioSetup.getNodeAdr("193.0.0.1", 1), Transport.UDP);
-               KContentMsg msg1 = new BasicContentMsg(header1, new Operation("RM", 1337));
-               trigger(msg1, networkPort);
-           }
+            if(op == 2) {
+                KHeader header1 = new BasicHeader(selfAdr, ScenarioSetup.getNodeAdr("193.0.0.1", 1), Transport.UDP);
+                KContentMsg msg1 = new BasicContentMsg(header1, new Operation("ADD", 1337));
+                trigger(msg1, networkPort);
+            }
+
+            if(op == 3) {
+                KHeader header1 = new BasicHeader(selfAdr, ScenarioSetup.getNodeAdr("193.0.0.1", 1), Transport.UDP);
+                KContentMsg msg1 = new BasicContentMsg(header1, new Operation("RM", 1337));
+                trigger(msg1, networkPort);
+            }
+
+            if(op == 4){
+                KHeader header1 = new BasicHeader(selfAdr, ScenarioSetup.getNodeAdr("193.0.0.1", 1), Transport.UDP);
+                KContentMsg msg1 = new BasicContentMsg(header1, new Operation("RM", 1339));
+                trigger(msg1, networkPort);
+            }
+
+            if(op == 5){
+                KHeader header1 = new BasicHeader(selfAdr, ScenarioSetup.getNodeAdr("193.0.0.1", 1), Transport.UDP);
+                KContentMsg msg1 = new BasicContentMsg(header1, new Operation("ADD", 1339));
+                trigger(msg1, networkPort);
+            }
+
+
+            if(op == 6){
+                KHeader header1 = new BasicHeader(selfAdr, ScenarioSetup.getNodeAdr("193.0.0.1", 1), Transport.UDP);
+                KContentMsg msg1 = new BasicContentMsg(header1, new Operation("RM", 1339));
+                trigger(msg1, networkPort);
+            }
+
 
         }
     };
