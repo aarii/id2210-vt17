@@ -24,6 +24,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import se.kth.app.AppComp;
 import se.kth.app.test.TestComp;
+import se.kth.app.test.TestRMComp;
 import se.kth.sim.compatibility.SimNodeIdExtractor;
 import se.kth.system.HostMngrComp;
 import se.sics.kompics.network.Address;
@@ -185,6 +186,36 @@ public class ScenarioGen {
     };
 
 
+    static Operation1<StartNodeEvent, Integer> startTestRMCompOp = new Operation1<StartNodeEvent, Integer>() {
+
+        @Override
+        public StartNodeEvent generate(final Integer nodeId) {
+            return new StartNodeEvent() {
+                KAddress selfAdr;
+
+                {
+                    selfAdr = ScenarioSetup.getNodeAdr("193.0.0", nodeId);
+                }
+
+                @Override
+                public Address getNodeAddress() {
+                    return selfAdr;
+                }
+
+                @Override
+                public Class getComponentDefinition() {
+                    return TestRMComp.class;
+                }
+
+                @Override
+                public TestRMComp.Init getComponentInit() {
+                    return new TestRMComp.Init(selfAdr, nodeId);
+                }
+            };
+        }
+    };
+
+
 
     public static SimulationScenario simpleSimulation() {
         SimulationScenario scen = new SimulationScenario() {
@@ -304,7 +335,14 @@ public class ScenarioGen {
                 StochasticProcess startTestComp = new StochasticProcess() {
                     {
                         eventInterArrivalTime(uniform(1000, 1100));
-                        raise(2, startTestCompOp, new BasicIntSequentialDistribution(0));
+                        raise(1, startTestCompOp, new BasicIntSequentialDistribution(0));
+                    }
+                };
+
+                final StochasticProcess startTestRMComp = new StochasticProcess() {
+                    {
+                        eventInterArrivalTime(uniform(1000, 1100));
+                        raise(1, startTestRMCompOp, new BasicIntSequentialDistribution(0));
                     }
                 };
 
@@ -330,7 +368,8 @@ public class ScenarioGen {
                 startTestComp.startAfterStartOf(100, startPeers);
                 startKillNode.startAfterStartOf(5000,startTestComp);
                 startReviveNode.startAfterStartOf(5000, startKillNode);
-                terminateAfterTerminationOf(5000, startReviveNode);
+                startTestRMComp.startAfterStartOf(5000, startReviveNode);
+                terminateAfterTerminationOf(5000, startTestRMComp);
             }
         };
 
