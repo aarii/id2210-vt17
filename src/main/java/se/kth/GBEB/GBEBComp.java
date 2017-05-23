@@ -50,10 +50,10 @@ public class GBEBComp extends ComponentDefinition {
     public final Handler<GBEBBroadcast> broadcastHandler = new Handler<GBEBBroadcast>() {
         @Override
         public void handle(GBEBBroadcast gbebBroadcast) {
-            System.out.println("i GBEBbroadcast är " + gbebBroadcast +" med msg " + gbebBroadcast.msg);
-
+           // System.out.println("i GBEBbroadcast är " + gbebBroadcast +" med msg " + gbebBroadcast.msg);
+            //System.out.println("GBEBBROADCAST.msg " + gbebBroadcast.msg);
             past.add(gbebBroadcast.msg);
-            LOG.debug("mypast is: " + past);
+           // LOG.debug("mypast is: " + past);
 
         }
     };

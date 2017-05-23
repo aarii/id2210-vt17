@@ -39,6 +39,7 @@ public class CRBComp extends ComponentDefinition {
       Handler<CRBBroadcast> handleBroadcast = new Handler<CRBBroadcast>() {
         @Override
         public void handle(CRBBroadcast crbBroadcast) {
+            LOG.debug("CRBBROadcast: " + crbBroadcast);
             EagerBroadcast eagerBroadcast = new EagerBroadcast(crbBroadcast, past);
             System.out.println("EagerBroadcast är " + eagerBroadcast +" med msg " + eagerBroadcast.msg);
 
@@ -56,16 +57,18 @@ public class CRBComp extends ComponentDefinition {
                 EagerBroadcast eagerBroadcast =  (EagerBroadcast) eagerDeliver.msg;
                 CRBBroadcast  crbBroadcast = (CRBBroadcast) eagerBroadcast.msg;
                 Operation operation = (Operation) crbBroadcast.msg;
-                    LOG.debug("Past i eagerdeliver är " + eagerBroadcast.past);
-                LOG.debug("vår past " + past);
-
+               // LOG.debug("EagerBroadcast: " + eagerBroadcast);
+               // LOG.debug("CRBBroadcast: " + crbBroadcast);
+                LOG.debug("Operation: " + operation.op);
+               // LOG.debug("Delivered innan " + delivered);
                 if (!delivered.contains(eagerBroadcast)) {
+                    LOG.debug("Operation1: " + operation.op);
 
                     for (KompicsEvent m : eagerBroadcast.past) {
                       //  System.out.println("M är: " + m);
                         if (!delivered.contains(m)) {
-                            System.out.println("operation i crbcomp är" + operation.op);
-                            CRBDeliver crbDeliver = new CRBDeliver(operation, eagerBroadcast.address);
+                            CRBDeliver crbDeliver = new CRBDeliver(operation, selfAdr);
+
                             trigger(crbDeliver, crbPort);
                             delivered.add(m);
                         }
@@ -76,14 +79,16 @@ public class CRBComp extends ComponentDefinition {
 
 
                     }
-                    if(!delivered.contains(((EagerBroadcast) eagerDeliver.msg).msg)) {
-                        LOG.debug("i den andra ifen past " + past);
+                 //   LOG.debug("Delivered mellan if: " + delivered);
+                    if(!delivered.contains(((EagerBroadcast) eagerDeliver.msg))) {
+                     //   LOG.debug("i den andra ifen past " + past);
                         trigger(new CRBDeliver(((EagerBroadcast) eagerDeliver.msg).msg, eagerDeliver.address), crbPort);
-                        delivered.add(((EagerBroadcast) eagerDeliver.msg).msg);
-                        if (!past.contains(((EagerBroadcast) eagerDeliver.msg).msg)) {
-                            past.add(((EagerBroadcast) eagerDeliver.msg).msg);
+                        delivered.add((eagerDeliver.msg));
+                        if (!past.contains((eagerDeliver.msg))) {
+                            past.add((eagerDeliver.msg));
                         }
                     }
+                 //   LOG.debug("Delivered efter ifsen: " + delivered);
                 }
             }
        }

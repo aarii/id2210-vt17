@@ -23,16 +23,26 @@ public class TwoPSet {
     }
 
     public void removeElement(Object obj){
+        System.out.println("gset innehåller: " + gset + " obj är " + obj);
+        for(Object s : gset.set){
+            System.out.println("OBj i gset är " + s);
 
-
+        }
         if(gset.contains(obj)){
+            System.out.println();
             tombstoneset.addElement(obj);
         }else{
-            Operation op = (Operation) obj;
-            LOG.info("Object " + op.op + " with value "+ op.value + " does not exist");
+            LOG.info("Object " + obj + " does not exist");
         }
 
     }
+
+
+    public void addElement(Object obj){
+        gset.addElement(obj);
+
+    }
+
 
 
     public void printSetContent(GSet set){

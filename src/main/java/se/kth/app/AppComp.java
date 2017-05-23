@@ -74,26 +74,29 @@ public class AppComp extends ComponentDefinition {
 
     @Override
     public void handle(Operation operation, KContentMsg<?, ?, Operation> container) {
-      LOG.info(" Node {} received the Operation event {} from TestComp with address: {}", selfAdr.getId(), operation.op, container.getHeader().getSource());
       //  LOG.info("selfAdr is:" + selfAdr);
+      LOG.info(" Node {} received the Operation {} with operation.op {} from TestComp with address: {}", selfAdr.getId(), operation, operation.op, container.getHeader().getSource());
 
       if(operation.op.equalsIgnoreCase("ADD")){
-        twoPSet.gset.addElement(operation);
+        LOG.info("Node {} added object.value {}", selfAdr.getId(), operation.value);
+
+        twoPSet.addElement(operation.value);
 
       }
 
       if(operation.op.equalsIgnoreCase("RM")){
-        twoPSet.removeElement(operation);
+        LOG.info("Node {} removed object.value {}", selfAdr.getId(), operation.value);
+        twoPSet.removeElement(operation.value);
 
       }
 
       if(operation.op.equalsIgnoreCase("LOOKUP")){
 
       }
-      System.out.println("Operation är " + operation + " med op " + operation.op + " med value " + operation.value);
-      trigger(new CRBBroadcast(operation, selfAdr), crbPort);
+      CRBBroadcast crbBroadcast = new CRBBroadcast(operation, selfAdr);
+      //LOG.debug("Node " + selfAdr.getId() + " with crbBroadcast: " + crbBroadcast);
 
-
+      trigger(crbBroadcast, crbPort);
 
     }
   };
@@ -102,28 +105,28 @@ public class AppComp extends ComponentDefinition {
     @Override
     public void handle(CRBDeliver crbDeliver) {
 
-      System.out.println("HEEELLLOOOOOOOOOOO " + crbDeliver.msg);
       if(crbDeliver.msg instanceof Operation){
 
         Operation operation = ((Operation) crbDeliver.msg);
-        LOG.debug("VÅR OPERATION I CRBDELIVER ÄR: " + operation.op + " MED VALUE " + operation.value);
+        //LOG.debug("VÅR OPERATION I CRBDELIVER ÄR: " + operation.op + " MED VALUE " + operation.value);
+        LOG.info(" Node {} received the Operation {} ", selfAdr.getId(), operation.op);
 
         if(operation.op.equalsIgnoreCase("ADD")){
-          LOG.info("Node {} received an ADD operation with value {}" , selfAdr.getId(), operation.value);
-          twoPSet.gset.addElement(operation);
+         // LOG.info("Node {} received an ADD operation with value {}" , selfAdr.getId(), operation.value);
+          twoPSet.addElement(operation.value);
 
         }
 
         if(operation.op.equalsIgnoreCase("RM")){
           LOG.info("Node {} received an RM operation with value {}" , selfAdr.getId(), operation.value);
-          twoPSet.removeElement(operation);
+          twoPSet.removeElement(operation.value);
 
         }
 
         if(operation.op.equalsIgnoreCase("LOOKUP")){
 
         }
-        System.out.println("VÅRT SET INNEHÅLLER " + twoPSet.gset);
+       // System.out.println("VÅRT SET INNEHÅLLER " + twoPSet.gset);
 
       }
     }

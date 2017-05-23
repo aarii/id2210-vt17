@@ -41,7 +41,7 @@ public class EagerComp extends ComponentDefinition {
         @Override
         public void handle(EagerBroadcast eagerBroadcast) {
             GBEBBroadcast gbebBroadcast = new GBEBBroadcast(eagerBroadcast, selfAdr);
-            System.out.println("GBEBBroadcast är " + gbebBroadcast +" med msg " + gbebBroadcast.msg);
+            // System.out.println("GBEBBroadcast är " + gbebBroadcast +" med msg " + gbebBroadcast.msg);
 
             trigger(gbebBroadcast, gbebPort);
         }
@@ -53,7 +53,7 @@ public class EagerComp extends ComponentDefinition {
 
 
             EagerBroadcast eagerBroadcast = (EagerBroadcast) gbebDeliver.msg;
-            LOG.debug("mypast in eagercomp ÄR " + eagerBroadcast.past);
+           // LOG.debug("mypast in eagercomp ÄR " + eagerBroadcast.past);
 
             if(!delivered.contains(eagerBroadcast)){
                 delivered.add(eagerBroadcast);
