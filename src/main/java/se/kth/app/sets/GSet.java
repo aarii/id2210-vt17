@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import se.kth.app.AppComp;
 import se.kth.app.test.Operation;
+import se.kth.graph.Vertex;
 import se.sics.ktoolbox.util.identifiable.Identifier;
 
 import java.util.ArrayList;
@@ -60,6 +61,17 @@ public class GSet {
             return true;
         }
 
+        return false;
+    }
+
+    public boolean containsVertex(Vertex vertex){
+
+        for(Object v : set){
+            Vertex vtemp = (Vertex) v;
+            if(vtemp.id == vertex.id){
+                return true;
+            }
+        }
         return false;
     }
 }

@@ -105,7 +105,7 @@ public class AppComp extends ComponentDefinition {
     if(operation.op.equalsIgnoreCase("ADD_V")){
 
       Vertex vertex = new Vertex(operation.value);
-      tptpGraph.vertexSet.addElement(vertex.id, selfAdr.getId());
+      tptpGraph.vertexSet.addElement(vertex, selfAdr.getId());
 
       Operation op = new Operation(vertex, operation.set, operation.op);
       CRBBroadcast crbBroadcast = new CRBBroadcast(op, selfAdr);
@@ -207,7 +207,7 @@ public class AppComp extends ComponentDefinition {
           if(operation.vertex instanceof Vertex){
 
             if(operation.op.equalsIgnoreCase("ADD_V")) {
-              tptpGraph.vertexSet.addElement(operation.vertex.id, selfAdr.getId());
+              tptpGraph.vertexSet.addElement(operation.vertex, selfAdr.getId());
               LOG.info("Node {}: after adding vertex with id {} , VA contains now: ", selfAdr.getId(), operation.vertex.id);
               for (Object e : tptpGraph.vertexSet.gset.set) {
                 LOG.info("(Node id  " + selfAdr.getId() + ") vertex id : " + e);

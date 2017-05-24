@@ -14,14 +14,14 @@ public class TPTPGraph {
 
     public boolean lookUpVertex(Vertex vertex){
 
-        if(vertexSet.gset.contains(vertex.id) && !vertexSet.tombstoneset.contains(vertex.id)){
+        if(vertexSet.gset.containsVertex(vertex) && !vertexSet.tombstoneset.containsVertex(vertex)){
             return true;
         }
         return false;
 
     }
 
-    public boolean lookUpEdge(Edge edge){
+  /*  public boolean lookUpEdge(Edge edge){
 
         if(lookUpVertex(edge.v1) && lookUpVertex(edge.v2) && edgeSet.gset.contains(edge.id)
                 && !edgeSet.tombstoneset.contains(edge.id)){
@@ -30,6 +30,6 @@ public class TPTPGraph {
         return false;
     }
 
-
+*/
 
 }
