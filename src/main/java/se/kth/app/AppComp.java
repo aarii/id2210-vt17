@@ -22,19 +22,18 @@ import org.slf4j.LoggerFactory;
 import se.kth.CRB.CRBBroadcast;
 import se.kth.CRB.CRBDeliver;
 import se.kth.CRB.CRBPort;
-import se.kth.GBEB.GBEBBroadcast;
-import se.kth.GBEB.GBEBDeliver;
+import se.kth.app.sets.OrSet;
 import se.kth.app.sets.TwoPSet;
+import se.kth.app.test.Element;
+import se.kth.app.test.ElementList;
 import se.kth.app.test.Operation;
-import se.kth.eagerRB.EagerBroadcast;
-import se.kth.eagerRB.EagerDeliver;
 import se.sics.kompics.*;
 import se.sics.kompics.network.Network;
-import se.sics.kompics.timer.Timer;
 import se.sics.ktoolbox.util.identifiable.Identifier;
 import se.sics.ktoolbox.util.network.KAddress;
 import se.sics.ktoolbox.util.network.KContentMsg;
-import sun.rmi.runtime.Log;
+import java.util.List;
+import java.util.UUID;
 
 /**
  * @author Alex Ormenisan <aaor@kth.se>
@@ -51,6 +50,9 @@ public class AppComp extends ComponentDefinition {
   //**************************************************************************
   private KAddress selfAdr;
   TwoPSet twoPSet = new TwoPSet();
+  OrSet orSet = new OrSet();
+  boolean source;
+
 
   public AppComp(Init init) {
     selfAdr = init.selfAdr;
@@ -74,60 +76,102 @@ public class AppComp extends ComponentDefinition {
 
     @Override
     public void handle(Operation operation, KContentMsg<?, ?, Operation> container) {
-      //  LOG.info("selfAdr is:" + selfAdr);
-      LOG.info(" Node {} received a {} operation from TestComp with address: {}", selfAdr.getId(), operation.op, container.getHeader().getSource());
-
-      if(operation.op.equalsIgnoreCase("ADD")){
-       // LOG.info("Node {} added object.value {}", selfAdr.getId(), operation.value);
-
-        twoPSet.addElement(operation.value, selfAdr.getId());
-
-      }
-
-      if(operation.op.equalsIgnoreCase("RM")){
-       // LOG.info("Node {} removed object.value {}", selfAdr.getId(), operation.value);
-        twoPSet.removeElement(operation.value, selfAdr.getId());
+      LOG.info("Node {}: received a {} operation from TestComp with address: {}", selfAdr.getId(), operation.op, container.getHeader().getSource());
+      if(operation.set.equalsIgnoreCase("2pset")){
+        simulateTwoPSet(operation);
+        CRBBroadcast crbBroadcast = new CRBBroadcast(operation, selfAdr);
+        trigger(crbBroadcast, crbPort);
+      }else if(operation.set.equalsIgnoreCase("orset")){
+        UUID uuid = UUID.randomUUID();
+        Element element = new Element(uuid, operation.value);
+        simulateOrSet(element, operation.op, operation.set);
 
       }
-
-      if(operation.op.equalsIgnoreCase("LOOKUP")){
-
-      }
-      CRBBroadcast crbBroadcast = new CRBBroadcast(operation, selfAdr);
-      //LOG.debug("Node " + selfAdr.getId() + " with crbBroadcast: " + crbBroadcast);
-
-      trigger(crbBroadcast, crbPort);
-
     }
   };
+
+  public void simulateOrSet(Element element, String operation, String set) {
+    if(operation.equalsIgnoreCase("ADD")){
+      //orSet.addElement(element);
+      CRBBroadcast crbBroadcast = new CRBBroadcast(new Operation(element, set), selfAdr);
+      trigger(crbBroadcast, crbPort);
+    /*  LOG.info("Node {}: after adding element with value "+ element.value + " and UUID "+ element.uuid + ", orSet contains now: ", selfAdr.getId());
+      for(Element e : orSet.payload){
+        LOG.info("(Node "+ selfAdr.getId()+ ") Value: " + e.value +" and UUID: " + e.uuid );
+      }
+      System.out.println();*/
+    }
+
+    if(operation.equalsIgnoreCase("RM")){
+      if(orSet.lookup(element)){
+        List<UUID> elementsToBeRemoved =  orSet.removeElement(element);
+        ElementList elementslist = new ElementList(elementsToBeRemoved);
+        CRBBroadcast crbBroadcast = new CRBBroadcast(new Operation(elementslist,set),selfAdr);
+        trigger(crbBroadcast, crbPort);
+      }
+    }
+  }
+
+
+  public void simulateTwoPSet(Operation operation){
+    if(operation.op.equalsIgnoreCase("ADD")){
+      twoPSet.addElement(operation.value, selfAdr.getId());
+    }
+
+    if(operation.op.equalsIgnoreCase("RM")){
+      twoPSet.removeElement(operation.value, selfAdr.getId());
+    }
+  }
+
 
   protected final Handler<CRBDeliver> handleCRBDeliver = new Handler<CRBDeliver>() {
     @Override
     public void handle(CRBDeliver crbDeliver) {
-
+      LOG.info(" I am " + selfAdr.getId() + " and received from " + crbDeliver.address);
       if(crbDeliver.msg instanceof Operation){
-
         Operation operation = ((Operation) crbDeliver.msg);
-        //LOG.debug("VÅR OPERATION I CRBDELIVER ÄR: " + operation.op + " MED VALUE " + operation.value);
-     //   LOG.info(" Node {} received the Operation {} ", selfAdr.getId(), operation.op);
 
-        if(operation.op.equalsIgnoreCase("ADD")){
-         // LOG.info("Node {} received an ADD operation with value {}" , selfAdr.getId(), operation.value);
-          twoPSet.addElement(operation.value, selfAdr.getId());
+        if(operation.set.equalsIgnoreCase("2pset")){
+          simulateTwoPSet(operation);
+        }else if(operation.set.equalsIgnoreCase("orset")){
+
+
+
+
+          if(operation.elementList instanceof ElementList){
+            ElementList elementList =  operation.elementList;
+
+            System.out.println();
+            LOG.info("Node {}: List of UUIDs to be removed are: ", selfAdr.getId());
+            for(UUID uuid : elementList.uuidList){
+              LOG.info("(Node "+ selfAdr.getId()+ ") "+ uuid.toString());
+            }
+            System.out.println();
+            orSet.removeElementsDownStream(elementList);
+
+            LOG.info("Node {}: Orset after remove contains: ", selfAdr.getId());
+            for(Element e : orSet.payload){
+              LOG.info("(Node "+ selfAdr.getId()+ ") Value: " + e.value +" and UUID: " + e.uuid );
+
+            }
+            System.out.println();
+
+          }
+
+          if(operation.element instanceof Element){
+
+            Element element =  operation.element;
+            orSet.addElement(element);
+
+            LOG.info("Node {}: after adding element with value "+ element.value + " and UUID "+ element.uuid + ", orSet contains now: ", selfAdr.getId());
+            for(Element e : orSet.payload){
+              LOG.info("(Node "+ selfAdr.getId()+ ") Value: " + e.value +" and UUID: " + e.uuid );
+            }
+            System.out.println();
+          }
+
 
         }
-
-        if(operation.op.equalsIgnoreCase("RM")){
-         // LOG.info("Node {} received an RM operation with value {}" , selfAdr.getId(), operation.value);
-          twoPSet.removeElement(operation.value, selfAdr.getId());
-
-        }
-
-        if(operation.op.equalsIgnoreCase("LOOKUP")){
-
-        }
-       // System.out.println("VÅRT SET INNEHÅLLER " + twoPSet.gset);
-
       }
     }
   };

@@ -3,6 +3,7 @@ package se.kth.app.sets;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import se.kth.app.AppComp;
+import se.kth.app.test.Operation;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +23,7 @@ public class GSet {
 
 
     public void addElement(Object obj){
+
 
         if (!set.contains(obj)){
             set.add(obj);
