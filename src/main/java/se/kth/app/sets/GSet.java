@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import se.kth.app.AppComp;
 import se.kth.app.test.Operation;
+import se.sics.ktoolbox.util.identifiable.Identifier;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +15,7 @@ import java.util.List;
 public class GSet {
     private static final Logger LOG = LoggerFactory.getLogger(GSet.class);
 
-    List<Object> set;
+    public List<Object> set;
 
     public GSet(ArrayList<Object> set){
         this.set = set;
@@ -22,8 +23,18 @@ public class GSet {
     }
 
 
-    public void addElement(Object obj){
+    public void addElement(Object obj, Identifier id){
 
+        if (!set.contains(obj)){
+            //LOG.debug("Node {} added the object {}", id, obj);
+            set.add(obj);
+        }else{
+          // LOG.info("For Node " + id + " the object " + obj + " is already added");
+        }
+
+    }
+
+    public void addElementTombstone(Object obj, Identifier id){
 
         if (!set.contains(obj)){
             set.add(obj);

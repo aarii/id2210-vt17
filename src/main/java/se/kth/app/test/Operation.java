@@ -1,5 +1,7 @@
 package se.kth.app.test;
 
+import se.kth.graph.Edge;
+import se.kth.graph.Vertex;
 import se.sics.kompics.ComponentDefinition;
 import se.sics.kompics.KompicsEvent;
 
@@ -15,6 +17,9 @@ public class Operation implements KompicsEvent, Serializable {
     public Element element;
     public ElementList elementList;
     public String set;
+    public Vertex vertex;
+    public Edge edge;
+
 
 
     public Operation(String op, int value, String set){
@@ -34,6 +39,15 @@ public class Operation implements KompicsEvent, Serializable {
         this.set = set;
     }
 
+    public Operation(Vertex vertex, String set, String op){
+        this.vertex = vertex;
+        this.set = set;
+        this.op = op;
+    }
 
+    public Operation(Edge edge, String set){
+        this.edge = edge;
+        this.set = set;
+    }
 
 }

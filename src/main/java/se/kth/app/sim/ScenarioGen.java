@@ -272,6 +272,63 @@ public class ScenarioGen {
         return scen;
     }
 
+    public static SimulationScenario simpleKillReviveNodeSimulation() {
+        SimulationScenario scen = new SimulationScenario() {
+            {
+                StochasticProcess systemSetup = new StochasticProcess() {
+                    {
+                        eventInterArrivalTime(constant(1000));
+                        raise(1, systemSetupOp);
+                    }
+                };
+                StochasticProcess startBootstrapServer = new StochasticProcess() {
+                    {
+                        eventInterArrivalTime(constant(1000));
+                        raise(1, startBootstrapServerOp);
+                    }
+                };
+                StochasticProcess startPeers = new StochasticProcess() {
+                    {
+                        eventInterArrivalTime(uniform(1000, 1100));
+                        raise(5, startNodeOp, new BasicIntSequentialDistribution(1));
+                    }
+                };
+                StochasticProcess startTestComp = new StochasticProcess() {
+                    {
+                        eventInterArrivalTime(uniform(1000, 1100));
+                        raise(7, startTestCompOp, new BasicIntSequentialDistribution(0));
+                    }
+                };
+
+
+                StochasticProcess startKillNode = new StochasticProcess() {
+                    {
+                        eventInterArrivalTime(uniform(1000, 1100));
+                        raise(1, killNodeOp, new BasicIntSequentialDistribution(1));
+                    }
+                };
+
+
+                StochasticProcess startReviveNode = new StochasticProcess() {
+                    {
+                        eventInterArrivalTime(uniform(1000, 1100));
+                        raise(1, startNodeOp, new BasicIntSequentialDistribution(1));
+
+                    }
+                };
+
+                systemSetup.start();
+                startBootstrapServer.startAfterTerminationOf(1000, systemSetup);
+                startPeers.startAfterTerminationOf(1000, startBootstrapServer);
+                startTestComp.startAfterTerminationOf(1000, startPeers);
+                startKillNode.startAfterTerminationOf(5000,startTestComp);
+                startReviveNode.startAfterTerminationOf(5000, startKillNode);
+                terminateAfterTerminationOf(5000, startReviveNode);
+            }
+        };
+
+        return scen;
+    }
 
     public static SimulationScenario simpleOrSetSimulation() {
         SimulationScenario scen = new SimulationScenario() {
@@ -331,8 +388,7 @@ public class ScenarioGen {
         return scen;
     }
 
-
-    public static SimulationScenario simpleKillReviveNodeSimulation() {
+    public static SimulationScenario simpleTPTPGraphSimulation() {
         SimulationScenario scen = new SimulationScenario() {
             {
                 StochasticProcess systemSetup = new StochasticProcess() {
@@ -356,7 +412,7 @@ public class ScenarioGen {
                 StochasticProcess startTestComp = new StochasticProcess() {
                     {
                         eventInterArrivalTime(uniform(1000, 1100));
-                        raise(7, startTestCompOp, new BasicIntSequentialDistribution(0));
+                        raise(2, startTestCompOp, new BasicIntSequentialDistribution(11));
                     }
                 };
 
@@ -381,13 +437,14 @@ public class ScenarioGen {
                 startBootstrapServer.startAfterTerminationOf(1000, systemSetup);
                 startPeers.startAfterTerminationOf(1000, startBootstrapServer);
                 startTestComp.startAfterTerminationOf(1000, startPeers);
-                startKillNode.startAfterTerminationOf(5000,startTestComp);
-                startReviveNode.startAfterTerminationOf(5000, startKillNode);
-                terminateAfterTerminationOf(5000, startReviveNode);
+               // startKillNode.startAfterTerminationOf(5000,startTestComp);
+                //  startReviveNode.startAfterTerminationOf(5000, startKillNode);
+                terminateAfterTerminationOf(5000, startTestComp);
             }
         };
 
         return scen;
     }
+
 
 }

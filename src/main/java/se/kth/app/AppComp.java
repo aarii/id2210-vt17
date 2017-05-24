@@ -27,6 +27,9 @@ import se.kth.app.sets.TwoPSet;
 import se.kth.app.test.Element;
 import se.kth.app.test.ElementList;
 import se.kth.app.test.Operation;
+import se.kth.graph.Edge;
+import se.kth.graph.TPTPGraph;
+import se.kth.graph.Vertex;
 import se.sics.kompics.*;
 import se.sics.kompics.network.Network;
 import se.sics.ktoolbox.util.identifiable.Identifier;
@@ -51,6 +54,7 @@ public class AppComp extends ComponentDefinition {
   private KAddress selfAdr;
   TwoPSet twoPSet = new TwoPSet();
   OrSet orSet = new OrSet();
+  TPTPGraph tptpGraph = new TPTPGraph();
   boolean source;
 
 
@@ -77,18 +81,46 @@ public class AppComp extends ComponentDefinition {
     @Override
     public void handle(Operation operation, KContentMsg<?, ?, Operation> container) {
       LOG.info("Node {}: received a {} operation from TestComp with address: {}", selfAdr.getId(), operation.op, container.getHeader().getSource());
+
       if(operation.set.equalsIgnoreCase("2pset")){
         simulateTwoPSet(operation);
         CRBBroadcast crbBroadcast = new CRBBroadcast(operation, selfAdr);
         trigger(crbBroadcast, crbPort);
-      }else if(operation.set.equalsIgnoreCase("orset")){
+      }
+
+      if(operation.set.equalsIgnoreCase("orset")){
         UUID uuid = UUID.randomUUID();
         Element element = new Element(uuid, operation.value);
         simulateOrSet(element, operation.op, operation.set);
 
+      }if(operation.set.equalsIgnoreCase("tptpgraph")){
+        simulateTPTPGraph(operation);
+
       }
     }
   };
+
+
+  public void simulateTPTPGraph(Operation operation){
+    if(operation.op.equalsIgnoreCase("ADD_V")){
+
+      Vertex vertex = new Vertex(operation.value);
+      tptpGraph.vertexSet.addElement(vertex.id, selfAdr.getId());
+
+      Operation op = new Operation(vertex, operation.set, operation.op);
+      CRBBroadcast crbBroadcast = new CRBBroadcast(op, selfAdr);
+      trigger(crbBroadcast, crbPort);
+
+    }
+
+/*TODO Implement RM_V so we can check if we can add vertices and remove them */
+
+    if(operation.op.equalsIgnoreCase("ADD_E")){
+
+
+
+    }
+  }
 
   public void simulateOrSet(Element element, String operation, String set) {
     if(operation.equalsIgnoreCase("ADD")){
@@ -127,16 +159,13 @@ public class AppComp extends ComponentDefinition {
   protected final Handler<CRBDeliver> handleCRBDeliver = new Handler<CRBDeliver>() {
     @Override
     public void handle(CRBDeliver crbDeliver) {
-      LOG.info(" I am " + selfAdr.getId() + " and received from " + crbDeliver.address);
       if(crbDeliver.msg instanceof Operation){
         Operation operation = ((Operation) crbDeliver.msg);
 
         if(operation.set.equalsIgnoreCase("2pset")){
           simulateTwoPSet(operation);
-        }else if(operation.set.equalsIgnoreCase("orset")){
-
-
-
+        }
+        if(operation.set.equalsIgnoreCase("orset")){
 
           if(operation.elementList instanceof ElementList){
             ElementList elementList =  operation.elementList;
@@ -172,6 +201,30 @@ public class AppComp extends ComponentDefinition {
 
 
         }
+
+        if(operation.set.equalsIgnoreCase("tptpgraph")){
+
+          if(operation.vertex instanceof Vertex){
+
+            if(operation.op.equalsIgnoreCase("ADD_V")) {
+              tptpGraph.vertexSet.addElement(operation.vertex.id, selfAdr.getId());
+              LOG.info("Node {}: after adding vertex with id {} , VA contains now: ", selfAdr.getId(), operation.vertex.id);
+              for (Object e : tptpGraph.vertexSet.gset.set) {
+                LOG.info("(Node id  " + selfAdr.getId() + ") vertex id : " + e);
+              }
+              System.out.println();
+            }
+
+            if(operation.op.equalsIgnoreCase("RM_V")){
+
+            }
+          }
+
+          if(operation.edge instanceof Edge){
+
+          }
+        }
+
       }
     }
   };

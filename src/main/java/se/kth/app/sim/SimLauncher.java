@@ -36,8 +36,11 @@ public class SimLauncher {
        // SimulationScenario simpleReviveNodeScenario = ScenarioGen.simpleKillReviveNodeSimulation();
        // simpleReviveNodeScenario.simulate(LauncherComp.class);
 
-        SimulationScenario simpleOrSetScenario = ScenarioGen.simpleOrSetSimulation();
-        simpleOrSetScenario.simulate(LauncherComp.class);
+       // SimulationScenario simpleOrSetScenario = ScenarioGen.simpleOrSetSimulation();
+       // simpleOrSetScenario.simulate(LauncherComp.class);
+
+        SimulationScenario simpleTPTPGraphScenario = ScenarioGen.simpleTPTPGraphSimulation();
+        simpleTPTPGraphScenario.simulate(LauncherComp.class);
 
     }
 }

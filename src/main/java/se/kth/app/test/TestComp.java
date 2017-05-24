@@ -113,9 +113,28 @@ public class TestComp extends ComponentDefinition {
                 trigger(msg1, networkPort);
             }
 
-           /* if(op == 11){
+            if(op == 11){
                 KHeader header1 = new BasicHeader(selfAdr, ScenarioSetup.getNodeAdr("193.0.0.1", 1), Transport.UDP);
-                KContentMsg msg1 = new BasicContentMsg(header1, new Operation("RM", 13, "orset"));
+                KContentMsg msg1 = new BasicContentMsg(header1, new Operation("ADD_V", 15, "tptpgraph"));
+                trigger(msg1, networkPort);
+            }
+
+            if(op == 12){
+                KHeader header1 = new BasicHeader(selfAdr, ScenarioSetup.getNodeAdr("193.0.0.1", 1), Transport.UDP);
+                KContentMsg msg1 = new BasicContentMsg(header1, new Operation("ADD_V", 13, "tptpgraph"));
+                trigger(msg1, networkPort);
+            }
+
+            if(op == 13){
+                KHeader header1 = new BasicHeader(selfAdr, ScenarioSetup.getNodeAdr("193.0.0.1", 1), Transport.UDP);
+                KContentMsg msg1 = new BasicContentMsg(header1, new Operation("RM_V", 13, "tptpgraph"));
+                trigger(msg1, networkPort);
+            }
+
+
+                    /* if(op == 11){
+                KHeader header1 = new BasicHeader(selfAdr, ScenarioSetup.getNodeAdr("193.0.0.1", 1), Transport.UDP);
+                KContentMsg msg1 = new BasicContentMsg(header1, new Operation("ADD_E", 2, 13, 15, "tptpgraph"));
                 trigger(msg1, networkPort);
             }*/
 

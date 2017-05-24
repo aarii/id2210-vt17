@@ -28,21 +28,16 @@ public class TwoPSet {
 
         if(gset.contains(obj)){
             System.out.println();
-            tombstoneset.addElement(obj);
-            LOG.debug("Node {} removed the object {}", id, obj);
+            tombstoneset.addElementTombstone(obj, id);
+            //LOG.debug("Node {} removed the object {}", id, obj);
         }else{
             LOG.info("Object " + obj + " does not exist");
         }
-
-
-
     }
 
-
     public void addElement(Object obj, Identifier id){
-        gset.addElement(obj);
+        gset.addElement(obj, id);
 
-            LOG.debug("Node {} added the object {}", id, obj);
 
     }
 
