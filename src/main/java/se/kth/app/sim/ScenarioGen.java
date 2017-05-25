@@ -388,7 +388,7 @@ public class ScenarioGen {
         return scen;
     }
 
-    public static SimulationScenario simpleTPTPGraphSimulation() {
+    public static SimulationScenario simpleTPTPGraphSimulation1() {
         SimulationScenario scen = new SimulationScenario() {
             {
                 StochasticProcess systemSetup = new StochasticProcess() {
@@ -412,7 +412,7 @@ public class ScenarioGen {
                 StochasticProcess startTestComp = new StochasticProcess() {
                     {
                         eventInterArrivalTime(uniform(1000, 1100));
-                        raise(2, startTestCompOp, new BasicIntSequentialDistribution(11));
+                        raise(6, startTestCompOp, new BasicIntSequentialDistribution(11));
                     }
                 };
 
@@ -446,5 +446,77 @@ public class ScenarioGen {
         return scen;
     }
 
+    public static SimulationScenario simpleTPTPGraphSimulation2() {
+        SimulationScenario scen = new SimulationScenario() {
+            {
+                StochasticProcess systemSetup = new StochasticProcess() {
+                    {
+                        eventInterArrivalTime(constant(1000));
+                        raise(1, systemSetupOp);
+                    }
+                };
+                StochasticProcess startBootstrapServer = new StochasticProcess() {
+                    {
+                        eventInterArrivalTime(constant(1000));
+                        raise(1, startBootstrapServerOp);
+                    }
+                };
+                StochasticProcess startPeers = new StochasticProcess() {
+                    {
+                        eventInterArrivalTime(uniform(1000, 1100));
+                        raise(5, startNodeOp, new BasicIntSequentialDistribution(1));
+                    }
+                };
+                StochasticProcess startTestComp = new StochasticProcess() {
+                    {
+                        eventInterArrivalTime(uniform(1000, 1100));
+                        raise(4, startTestCompOp, new BasicIntSequentialDistribution(11));
+                    }
+                };
+
+                StochasticProcess startTestComp1 = new StochasticProcess() {
+                    {
+                        eventInterArrivalTime(uniform(1000, 1100));
+                        raise(1, startTestCompOp, new BasicIntSequentialDistribution(15));
+                    }
+                };
+
+                StochasticProcess startTestComp2 = new StochasticProcess() {
+                    {
+                        eventInterArrivalTime(uniform(1000, 1100));
+                        raise(1, startTestCompOp, new BasicIntSequentialDistribution(16));
+                    }
+                };
+
+                StochasticProcess startKillNode = new StochasticProcess() {
+                    {
+                        eventInterArrivalTime(uniform(1000, 1100));
+                        raise(1, killNodeOp, new BasicIntSequentialDistribution(1));
+                    }
+                };
+
+
+                StochasticProcess startReviveNode = new StochasticProcess() {
+                    {
+                        eventInterArrivalTime(uniform(1000, 1100));
+                        raise(1, startNodeOp, new BasicIntSequentialDistribution(1));
+
+                    }
+                };
+
+                systemSetup.start();
+                startBootstrapServer.startAfterTerminationOf(1000, systemSetup);
+                startPeers.startAfterTerminationOf(1000, startBootstrapServer);
+                startTestComp.startAfterTerminationOf(1000, startPeers);
+                startTestComp1.startAfterTerminationOf(0, startTestComp);
+                startTestComp2.startAfterTerminationOf(0, startTestComp);
+                // startKillNode.startAfterTerminationOf(5000,startTestComp);
+                //  startReviveNode.startAfterTerminationOf(5000, startKillNode);
+                terminateAfterTerminationOf(5000, startTestComp2);
+            }
+        };
+
+        return scen;
+    }
 
 }

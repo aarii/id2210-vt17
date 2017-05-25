@@ -4,6 +4,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import se.kth.app.AppComp;
 import se.kth.app.test.Operation;
+import se.kth.graph.Edge;
+import se.kth.graph.Vertex;
 import se.sics.ktoolbox.util.identifiable.Identifier;
 
 
@@ -35,6 +37,19 @@ public class TwoPSet {
         }
     }
 
+    public void removeVertex(Vertex v, Identifier id){
+
+        if(gset.containsVertex(v)){
+            System.out.println();
+            tombstoneset.addElementTombstone(v, id);
+            //LOG.debug("Node {} removed the object {}", id, obj);
+        }else{
+            LOG.info("Object " + v + " does not exist");
+        }
+    }
+
+
+
     public void addElement(Object obj, Identifier id){
         gset.addElement(obj, id);
 
@@ -45,5 +60,17 @@ public class TwoPSet {
 
     public void printSetContent(GSet set){
 
+    }
+
+    public void removeEdge(Edge e, Identifier id) {
+
+
+        if(gset.containsEdge(e)){
+            System.out.println();
+            tombstoneset.addElementTombstone(e, id);
+            //LOG.debug("Node {} removed the object {}", id, obj);
+        }else{
+            LOG.info("Object " + e + " does not exist");
+        }
     }
 }

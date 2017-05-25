@@ -127,16 +127,29 @@ public class TestComp extends ComponentDefinition {
 
             if(op == 13){
                 KHeader header1 = new BasicHeader(selfAdr, ScenarioSetup.getNodeAdr("193.0.0.1", 1), Transport.UDP);
-                KContentMsg msg1 = new BasicContentMsg(header1, new Operation("RM_V", 13, "tptpgraph"));
+                KContentMsg msg1 = new BasicContentMsg(header1, new Operation("ADD_V", 17, "tptpgraph"));
+                trigger(msg1, networkPort);
+            }
+
+            if(op == 14){
+                KHeader header1 = new BasicHeader(selfAdr, ScenarioSetup.getNodeAdr("193.0.0.1", 1), Transport.UDP);
+                KContentMsg msg1 = new BasicContentMsg(header1, new Operation("ADD_E", 1, 13, 15, "tptpgraph"));
+                trigger(msg1, networkPort);
+            }
+
+            if(op == 15){
+                KHeader header1 = new BasicHeader(selfAdr, ScenarioSetup.getNodeAdr("193.0.0.1", 1), Transport.UDP);
+                KContentMsg msg1 = new BasicContentMsg(header1, new Operation("ADD_E", 2, 17, 15, "tptpgraph"));
+                trigger(msg1, networkPort);
+            }
+
+            if(op == 16){
+                KHeader header1 = new BasicHeader(selfAdr, ScenarioSetup.getNodeAdr("193.0.0.1", 1), Transport.UDP);
+                KContentMsg msg1 = new BasicContentMsg(header1, new Operation("RM_V", 15, "tptpgraph"));
                 trigger(msg1, networkPort);
             }
 
 
-                    /* if(op == 11){
-                KHeader header1 = new BasicHeader(selfAdr, ScenarioSetup.getNodeAdr("193.0.0.1", 1), Transport.UDP);
-                KContentMsg msg1 = new BasicContentMsg(header1, new Operation("ADD_E", 2, 13, 15, "tptpgraph"));
-                trigger(msg1, networkPort);
-            }*/
 
         }
     };

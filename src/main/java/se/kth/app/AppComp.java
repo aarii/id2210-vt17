@@ -32,9 +32,12 @@ import se.kth.graph.TPTPGraph;
 import se.kth.graph.Vertex;
 import se.sics.kompics.*;
 import se.sics.kompics.network.Network;
+import se.sics.kompics.simulator.run.LauncherComp;
 import se.sics.ktoolbox.util.identifiable.Identifier;
 import se.sics.ktoolbox.util.network.KAddress;
 import se.sics.ktoolbox.util.network.KContentMsg;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -95,7 +98,6 @@ public class AppComp extends ComponentDefinition {
 
       }if(operation.set.equalsIgnoreCase("tptpgraph")){
         simulateTPTPGraph(operation);
-
       }
     }
   };
@@ -113,14 +115,66 @@ public class AppComp extends ComponentDefinition {
 
     }
 
-/*TODO Implement RM_V so we can check if we can add vertices and remove them */
 
     if(operation.op.equalsIgnoreCase("ADD_E")){
+      Vertex v1 = new Vertex(operation.v1);
+      Vertex v2 = new Vertex(operation.v2);
+      Edge edge = new Edge(v1, v2, operation.id);
+      if(tptpGraph.lookUpVertex(edge.v1) && tptpGraph.lookUpVertex(edge.v2)){
+        tptpGraph.edgeSet.addElement(edge, selfAdr.getId());
+        Operation op = new Operation(edge, operation.set, operation.op);
+        CRBBroadcast crbBroadcast = new CRBBroadcast(op, selfAdr);
+        trigger(crbBroadcast, crbPort);
+
+      }
+    }
 
 
+    if(operation.op.equalsIgnoreCase("RM_V")){
+      Vertex v = new Vertex(operation.value);
+      boolean lookupVertex = tptpGraph.lookUpVertex(v);
+      List<Edge> edges = new ArrayList<>();
+      List<Edge> correctEdges = new ArrayList<>();
+      if(lookupVertex) {
+        edges = tptpGraph.edgesToBeRemoved(v);
+      for(Edge e : edges){
+          if(tptpGraph.edgeSet.gset.containsEdge(e) && !tptpGraph.edgeSet.tombstoneset.containsEdge(e)
+                  && v != e.v1 && v != e.v2 ){
+            correctEdges.add(e);
+
+          }
+
+      }
+
+        Operation op = new Operation(v, correctEdges, operation.set, operation.op);
+        CRBBroadcast crbBroadcast = new CRBBroadcast(op, selfAdr);
+        trigger(crbBroadcast, crbPort);
+
+
+      }
+    }
+
+    if(operation.op.equalsIgnoreCase("RM_E")){
+
+      Edge edge = new Edge(operation.value);
+      if(tptpGraph.lookUpEdge(edge)) {
+
+
+
+        Operation op = new Operation(edge, operation.set, operation.op);
+        CRBBroadcast crbBroadcast = new CRBBroadcast(op, selfAdr);
+        trigger(crbBroadcast, crbPort);
+      }
 
     }
+
+
+
+
+
   }
+
+
 
   public void simulateOrSet(Element element, String operation, String set) {
     if(operation.equalsIgnoreCase("ADD")){
@@ -169,7 +223,6 @@ public class AppComp extends ComponentDefinition {
 
           if(operation.elementList instanceof ElementList){
             ElementList elementList =  operation.elementList;
-
             System.out.println();
             LOG.info("Node {}: List of UUIDs to be removed are: ", selfAdr.getId());
             for(UUID uuid : elementList.uuidList){
@@ -177,14 +230,11 @@ public class AppComp extends ComponentDefinition {
             }
             System.out.println();
             orSet.removeElementsDownStream(elementList);
-
             LOG.info("Node {}: Orset after remove contains: ", selfAdr.getId());
             for(Element e : orSet.payload){
               LOG.info("(Node "+ selfAdr.getId()+ ") Value: " + e.value +" and UUID: " + e.uuid );
-
             }
             System.out.println();
-
           }
 
           if(operation.element instanceof Element){
@@ -198,8 +248,6 @@ public class AppComp extends ComponentDefinition {
             }
             System.out.println();
           }
-
-
         }
 
         if(operation.set.equalsIgnoreCase("tptpgraph")){
@@ -210,25 +258,71 @@ public class AppComp extends ComponentDefinition {
               tptpGraph.vertexSet.addElement(operation.vertex, selfAdr.getId());
               LOG.info("Node {}: after adding vertex with id {} , VA contains now: ", selfAdr.getId(), operation.vertex.id);
               for (Object e : tptpGraph.vertexSet.gset.set) {
-                LOG.info("(Node id  " + selfAdr.getId() + ") vertex id : " + e);
+                LOG.info("(Node id  " + selfAdr.getId() + ") vertex id : " + ((Vertex) e).id);
               }
               System.out.println();
             }
 
+
             if(operation.op.equalsIgnoreCase("RM_V")){
 
+              tptpGraph.vertexSet.removeVertex(operation.vertex, selfAdr.getId());
+
+
+              for(Edge e : operation.edges){
+                tptpGraph.edgeSet.removeEdge(e, selfAdr.getId());
+              }
+
+
+              LOG.info("Node {}: after removing node with vertex id {} , ER contains now: ", selfAdr.getId(), operation.vertex.id);
+              for (Object e : tptpGraph.edgeSet.tombstoneset.set) {
+                LOG.info("(Node id  " + selfAdr.getId() + ") edge id : " + ((Edge) e).id);
+              }
+
+              LOG.info("Node {}: after removing vertex with id {} , VR contains now: ", selfAdr.getId(), operation.vertex.id);
+              for (Object e : tptpGraph.vertexSet.tombstoneset.set) {
+                LOG.info("(Node id  " + selfAdr.getId() + ") vertex id : " + ((Vertex) e).id);
+              }
+
+              LOG.info("Node {}: and VA contains now: ", selfAdr.getId());
+              for (Object e : tptpGraph.vertexSet.gset.set) {
+                LOG.info("(Node id  " + selfAdr.getId() + ") vertex id : " + ((Vertex) e).id);
+              }
             }
           }
 
           if(operation.edge instanceof Edge){
 
+            if(operation.op.equalsIgnoreCase("ADD_E")) {
+              System.out.println("KOM IN I DOWNSTREAM ADDE");
+              tptpGraph.edgeSet.addElement(operation.edge, selfAdr.getId());
+              LOG.info("Node {}: after adding edge with id {} with v1 {} and v2 {}, EA contains now: ", selfAdr.getId(), operation.edge.id, operation.edge.v1.id, operation.edge.v2.id);
+              for (Object e : tptpGraph.edgeSet.gset.set) {
+                LOG.info("(Node id  " + selfAdr.getId() + ") edge id : " + ((Edge) e).id);
+              }
+            }
+
+            if(operation.op.equalsIgnoreCase("RM_E")){
+              if(tptpGraph.edgeSet.gset.containsEdge(operation.edge)){
+                tptpGraph.edgeSet.removeEdge(operation.edge, selfAdr.getId());
+              }
+
+
+              LOG.info("Node {}: after removing edge with id {} , ER contains now: ", selfAdr.getId(), operation.edge.id);
+              for (Object e : tptpGraph.edgeSet.tombstoneset.set) {
+                LOG.info("(Node id  " + selfAdr.getId() + ") edge id : " + ((Edge) e).id);
+              }
+
+              LOG.info("Node {}: and EA contains now: ", selfAdr.getId());
+              for (Object e : tptpGraph.edgeSet.gset.set) {
+                LOG.info("(Node id  " + selfAdr.getId() + ") edge id : " + ((Edge) e).id);
+              }
+            }
           }
         }
-
       }
     }
   };
-
 
 
   public static class Init extends se.sics.kompics.Init<AppComp> {

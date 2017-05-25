@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import se.kth.app.AppComp;
 import se.kth.app.test.Operation;
+import se.kth.graph.Edge;
 import se.kth.graph.Vertex;
 import se.sics.ktoolbox.util.identifiable.Identifier;
 
@@ -69,6 +70,17 @@ public class GSet {
         for(Object v : set){
             Vertex vtemp = (Vertex) v;
             if(vtemp.id == vertex.id){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean containsEdge(Edge edge){
+
+        for(Object e : set){
+            Edge etemp = (Edge) e;
+            if(etemp.id == edge.id){
                 return true;
             }
         }

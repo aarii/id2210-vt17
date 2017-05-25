@@ -17,4 +17,9 @@ public class Edge implements KompicsEvent {
         this.id = id;
 
     }
+
+    public Edge( int id){
+        this.id = id;
+
+    }
 }

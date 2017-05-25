@@ -39,8 +39,11 @@ public class SimLauncher {
        // SimulationScenario simpleOrSetScenario = ScenarioGen.simpleOrSetSimulation();
        // simpleOrSetScenario.simulate(LauncherComp.class);
 
-        SimulationScenario simpleTPTPGraphScenario = ScenarioGen.simpleTPTPGraphSimulation();
-        simpleTPTPGraphScenario.simulate(LauncherComp.class);
+      //  SimulationScenario simpleTPTPGraphScenario = ScenarioGen.simpleTPTPGraphSimulation1();
+      //  simpleTPTPGraphScenario.simulate(LauncherComp.class);
+
+        SimulationScenario simpleTPTPGraphScenario2 = ScenarioGen.simpleTPTPGraphSimulation2();
+        simpleTPTPGraphScenario2.simulate(LauncherComp.class);
 
     }
 }
