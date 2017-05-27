@@ -1,0 +1,101 @@
+[17:02:14,610] INFO  {CodeInstrumentation} no user defined instrumentation exceptions detected
+[00:00:02,000] INFO  {ScenarioGen} Node 1 has been started
+[00:00:03,065] INFO  {ScenarioGen} Node 2 has been started
+[00:00:04,000] WARN  {CroupierComp} <nid:1,oid:CROUPIER,o:01,bId:0> no partners - not shuffling
+[00:00:04,160] INFO  {ScenarioGen} Node 3 has been started
+[00:00:05,065] WARN  {CroupierComp} <nid:2,oid:CROUPIER,o:01,bId:0> no neighbours
+[00:00:05,246] INFO  {ScenarioGen} Node 4 has been started
+[00:00:06,160] WARN  {CroupierComp} <nid:3,oid:CROUPIER,o:01,bId:0> no neighbours
+[00:00:06,292] INFO  {ScenarioGen} Node 5 has been started
+[00:00:07,246] WARN  {CroupierComp} <nid:4,oid:CROUPIER,o:01,bId:0> no neighbours
+[00:00:07,292] INFO  {AppComp} Node 1: received a ADD operation from TestComp with address: 193.0.0.0:12345<7>
+[00:00:08,000] INFO  {AppComp} Node 1: after adding element with value 12 and UUID 7f4de336-5993-27c8-6acf-25f56c3241c8, orSet contains now: 
+[00:00:08,000] INFO  {AppComp} (Node 1) Value: 12 and UUID: 7f4de336-5993-27c8-6acf-25f56c3241c8
+[00:00:08,160] INFO  {AppComp} Node 3: after adding element with value 12 and UUID 7f4de336-5993-27c8-6acf-25f56c3241c8, orSet contains now: 
+[00:00:08,160] INFO  {AppComp} (Node 3) Value: 12 and UUID: 7f4de336-5993-27c8-6acf-25f56c3241c8
+[00:00:08,292] WARN  {CroupierComp} <nid:5,oid:CROUPIER,o:01,bId:0> no neighbours
+[00:00:08,326] INFO  {AppComp} Node 1: received a ADD operation from TestComp with address: 193.0.0.0:12345<8>
+[00:00:09,065] INFO  {AppComp} Node 2: after adding element with value 12 and UUID 7f4de336-5993-27c8-6acf-25f56c3241c8, orSet contains now: 
+[00:00:09,065] INFO  {AppComp} (Node 2) Value: 12 and UUID: 7f4de336-5993-27c8-6acf-25f56c3241c8
+[00:00:09,065] INFO  {AppComp} Node 2: after adding element with value 13 and UUID e129e92b-33d5-bfec-7f3f-426ea5cc5123, orSet contains now: 
+[00:00:09,065] INFO  {AppComp} (Node 2) Value: 12 and UUID: 7f4de336-5993-27c8-6acf-25f56c3241c8
+[00:00:09,065] INFO  {AppComp} (Node 2) Value: 13 and UUID: e129e92b-33d5-bfec-7f3f-426ea5cc5123
+[00:00:09,246] INFO  {AppComp} Node 4: after adding element with value 12 and UUID 7f4de336-5993-27c8-6acf-25f56c3241c8, orSet contains now: 
+[00:00:09,246] INFO  {AppComp} (Node 4) Value: 12 and UUID: 7f4de336-5993-27c8-6acf-25f56c3241c8
+[00:00:09,246] INFO  {AppComp} Node 4: after adding element with value 13 and UUID e129e92b-33d5-bfec-7f3f-426ea5cc5123, orSet contains now: 
+[00:00:09,246] INFO  {AppComp} (Node 4) Value: 12 and UUID: 7f4de336-5993-27c8-6acf-25f56c3241c8
+[00:00:09,246] INFO  {AppComp} (Node 4) Value: 13 and UUID: e129e92b-33d5-bfec-7f3f-426ea5cc5123
+[00:00:09,346] INFO  {AppComp} Node 1: received a ADD operation from TestComp with address: 193.0.0.0:12345<9>
+[00:00:10,000] INFO  {AppComp} Node 1: after adding element with value 13 and UUID e129e92b-33d5-bfec-7f3f-426ea5cc5123, orSet contains now: 
+[00:00:10,000] INFO  {AppComp} (Node 1) Value: 12 and UUID: 7f4de336-5993-27c8-6acf-25f56c3241c8
+[00:00:10,000] INFO  {AppComp} (Node 1) Value: 13 and UUID: e129e92b-33d5-bfec-7f3f-426ea5cc5123
+[00:00:10,000] INFO  {AppComp} Node 1: after adding element with value 12 and UUID 261ca8b5-c891-3077-959f-c024ff8d877f, orSet contains now: 
+[00:00:10,000] INFO  {AppComp} (Node 1) Value: 12 and UUID: 7f4de336-5993-27c8-6acf-25f56c3241c8
+[00:00:10,000] INFO  {AppComp} (Node 1) Value: 13 and UUID: e129e92b-33d5-bfec-7f3f-426ea5cc5123
+[00:00:10,000] INFO  {AppComp} (Node 1) Value: 12 and UUID: 261ca8b5-c891-3077-959f-c024ff8d877f
+[00:00:10,160] INFO  {AppComp} Node 3: after adding element with value 13 and UUID e129e92b-33d5-bfec-7f3f-426ea5cc5123, orSet contains now: 
+[00:00:10,160] INFO  {AppComp} (Node 3) Value: 12 and UUID: 7f4de336-5993-27c8-6acf-25f56c3241c8
+[00:00:10,160] INFO  {AppComp} (Node 3) Value: 13 and UUID: e129e92b-33d5-bfec-7f3f-426ea5cc5123
+[00:00:10,160] INFO  {AppComp} Node 3: after adding element with value 12 and UUID 261ca8b5-c891-3077-959f-c024ff8d877f, orSet contains now: 
+[00:00:10,160] INFO  {AppComp} (Node 3) Value: 12 and UUID: 7f4de336-5993-27c8-6acf-25f56c3241c8
+[00:00:10,160] INFO  {AppComp} (Node 3) Value: 13 and UUID: e129e92b-33d5-bfec-7f3f-426ea5cc5123
+[00:00:10,160] INFO  {AppComp} (Node 3) Value: 12 and UUID: 261ca8b5-c891-3077-959f-c024ff8d877f
+[00:00:10,292] INFO  {AppComp} Node 5: after adding element with value 12 and UUID 7f4de336-5993-27c8-6acf-25f56c3241c8, orSet contains now: 
+[00:00:10,292] INFO  {AppComp} (Node 5) Value: 12 and UUID: 7f4de336-5993-27c8-6acf-25f56c3241c8
+[00:00:10,292] INFO  {AppComp} Node 5: after adding element with value 13 and UUID e129e92b-33d5-bfec-7f3f-426ea5cc5123, orSet contains now: 
+[00:00:10,292] INFO  {AppComp} (Node 5) Value: 12 and UUID: 7f4de336-5993-27c8-6acf-25f56c3241c8
+[00:00:10,292] INFO  {AppComp} (Node 5) Value: 13 and UUID: e129e92b-33d5-bfec-7f3f-426ea5cc5123
+[00:00:10,292] INFO  {AppComp} Node 5: after adding element with value 12 and UUID 261ca8b5-c891-3077-959f-c024ff8d877f, orSet contains now: 
+[00:00:10,292] INFO  {AppComp} (Node 5) Value: 12 and UUID: 7f4de336-5993-27c8-6acf-25f56c3241c8
+[00:00:10,292] INFO  {AppComp} (Node 5) Value: 13 and UUID: e129e92b-33d5-bfec-7f3f-426ea5cc5123
+[00:00:10,292] INFO  {AppComp} (Node 5) Value: 12 and UUID: 261ca8b5-c891-3077-959f-c024ff8d877f
+[00:00:10,381] INFO  {AppComp} Node 1: received a RM operation from TestComp with address: 193.0.0.0:12345<10>
+[00:00:11,065] INFO  {AppComp} Node 2: after adding element with value 12 and UUID 261ca8b5-c891-3077-959f-c024ff8d877f, orSet contains now: 
+[00:00:11,065] INFO  {AppComp} (Node 2) Value: 12 and UUID: 7f4de336-5993-27c8-6acf-25f56c3241c8
+[00:00:11,065] INFO  {AppComp} (Node 2) Value: 13 and UUID: e129e92b-33d5-bfec-7f3f-426ea5cc5123
+[00:00:11,065] INFO  {AppComp} (Node 2) Value: 12 and UUID: 261ca8b5-c891-3077-959f-c024ff8d877f
+[00:00:11,065] INFO  {AppComp} Node 2: List of UUIDs to be removed are: 
+[00:00:11,065] INFO  {AppComp} (Node 2) 7f4de336-5993-27c8-6acf-25f56c3241c8
+[00:00:11,065] INFO  {AppComp} (Node 2) 261ca8b5-c891-3077-959f-c024ff8d877f
+[00:00:11,065] INFO  {AppComp} Node 2: Orset after remove contains: 
+[00:00:11,065] INFO  {AppComp} (Node 2) Value: 13 and UUID: e129e92b-33d5-bfec-7f3f-426ea5cc5123
+[00:00:11,246] INFO  {AppComp} Node 4: after adding element with value 12 and UUID 261ca8b5-c891-3077-959f-c024ff8d877f, orSet contains now: 
+[00:00:11,246] INFO  {AppComp} (Node 4) Value: 12 and UUID: 7f4de336-5993-27c8-6acf-25f56c3241c8
+[00:00:11,246] INFO  {AppComp} (Node 4) Value: 13 and UUID: e129e92b-33d5-bfec-7f3f-426ea5cc5123
+[00:00:11,246] INFO  {AppComp} (Node 4) Value: 12 and UUID: 261ca8b5-c891-3077-959f-c024ff8d877f
+[00:00:11,246] INFO  {AppComp} Node 4: List of UUIDs to be removed are: 
+[00:00:11,246] INFO  {AppComp} (Node 4) 7f4de336-5993-27c8-6acf-25f56c3241c8
+[00:00:11,246] INFO  {AppComp} (Node 4) 261ca8b5-c891-3077-959f-c024ff8d877f
+[00:00:11,246] INFO  {AppComp} Node 4: Orset after remove contains: 
+[00:00:11,246] INFO  {AppComp} (Node 4) Value: 13 and UUID: e129e92b-33d5-bfec-7f3f-426ea5cc5123
+[00:00:12,000] INFO  {AppComp} Node 1: List of UUIDs to be removed are: 
+[00:00:12,000] INFO  {AppComp} (Node 1) 7f4de336-5993-27c8-6acf-25f56c3241c8
+[00:00:12,000] INFO  {AppComp} (Node 1) 261ca8b5-c891-3077-959f-c024ff8d877f
+[00:00:12,000] INFO  {AppComp} Node 1: Orset after remove contains: 
+[00:00:12,000] INFO  {AppComp} (Node 1) Value: 13 and UUID: e129e92b-33d5-bfec-7f3f-426ea5cc5123
+[00:00:12,160] INFO  {AppComp} Node 3: List of UUIDs to be removed are: 
+[00:00:12,160] INFO  {AppComp} (Node 3) 7f4de336-5993-27c8-6acf-25f56c3241c8
+[00:00:12,160] INFO  {AppComp} (Node 3) 261ca8b5-c891-3077-959f-c024ff8d877f
+[00:00:12,160] INFO  {AppComp} Node 3: Orset after remove contains: 
+[00:00:12,160] INFO  {AppComp} (Node 3) Value: 13 and UUID: e129e92b-33d5-bfec-7f3f-426ea5cc5123
+[00:00:12,292] INFO  {AppComp} Node 5: List of UUIDs to be removed are: 
+[00:00:12,292] INFO  {AppComp} (Node 5) 7f4de336-5993-27c8-6acf-25f56c3241c8
+[00:00:12,292] INFO  {AppComp} (Node 5) 261ca8b5-c891-3077-959f-c024ff8d877f
+[00:00:12,292] INFO  {AppComp} Node 5: Orset after remove contains: 
+[00:00:12,292] INFO  {AppComp} (Node 5) Value: 13 and UUID: e129e92b-33d5-bfec-7f3f-426ea5cc5123
+[00:00:15,381] INFO  {ScenarioGen} Node 1 was killed
+[00:00:20,381] INFO  {ScenarioGen} Node 1 has been started
+[00:00:22,381] INFO  {AppComp} Node 1: after adding element with value 12 and UUID 7f4de336-5993-27c8-6acf-25f56c3241c8, orSet contains now: 
+[00:00:22,381] INFO  {AppComp} (Node 1) Value: 12 and UUID: 7f4de336-5993-27c8-6acf-25f56c3241c8
+[00:00:22,381] INFO  {AppComp} Node 1: after adding element with value 13 and UUID e129e92b-33d5-bfec-7f3f-426ea5cc5123, orSet contains now: 
+[00:00:22,381] INFO  {AppComp} (Node 1) Value: 12 and UUID: 7f4de336-5993-27c8-6acf-25f56c3241c8
+[00:00:22,381] INFO  {AppComp} (Node 1) Value: 13 and UUID: e129e92b-33d5-bfec-7f3f-426ea5cc5123
+[00:00:22,381] INFO  {AppComp} Node 1: after adding element with value 12 and UUID 261ca8b5-c891-3077-959f-c024ff8d877f, orSet contains now: 
+[00:00:22,381] INFO  {AppComp} (Node 1) Value: 12 and UUID: 7f4de336-5993-27c8-6acf-25f56c3241c8
+[00:00:22,381] INFO  {AppComp} (Node 1) Value: 13 and UUID: e129e92b-33d5-bfec-7f3f-426ea5cc5123
+[00:00:22,381] INFO  {AppComp} (Node 1) Value: 12 and UUID: 261ca8b5-c891-3077-959f-c024ff8d877f
+[00:00:22,381] INFO  {AppComp} Node 1: List of UUIDs to be removed are: 
+[00:00:22,381] INFO  {AppComp} (Node 1) 7f4de336-5993-27c8-6acf-25f56c3241c8
+[00:00:22,381] INFO  {AppComp} (Node 1) 261ca8b5-c891-3077-959f-c024ff8d877f
+[00:00:22,381] INFO  {AppComp} Node 1: Orset after remove contains: 
+[00:00:22,381] INFO  {AppComp} (Node 1) Value: 13 and UUID: e129e92b-33d5-bfec-7f3f-426ea5cc5123

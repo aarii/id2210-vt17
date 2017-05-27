@@ -1,0 +1,44 @@
+[16:49:47,831] INFO  {CodeInstrumentation} no user defined instrumentation exceptions detected
+[00:00:02,000] INFO  {ScenarioGen} Node 1 has been started
+[00:00:02,100] INFO  {AppComp} Node 1: received a ADD operation from TestComp with address: 193.0.0.0:12345<0>
+[00:00:02,100] INFO  {AppComp} Node 1: after adding element with value 1337, 2pSet gset contains now: 
+[00:00:02,100] INFO  {AppComp} (Node 1) Value: 1337
+[00:00:03,065] INFO  {ScenarioGen} Node 2 has been started
+[00:00:03,195] INFO  {AppComp} Node 1: received a ADD operation from TestComp with address: 193.0.0.0:12345<1>
+[00:00:03,195] INFO  {AppComp} Node 1: after adding element with value 1338, 2pSet gset contains now: 
+[00:00:03,195] INFO  {AppComp} (Node 1) Value: 1337
+[00:00:03,195] INFO  {AppComp} (Node 1) Value: 1338
+[00:00:04,000] WARN  {CroupierComp} <nid:1,oid:CROUPIER,o:01,bId:0> no partners - not shuffling
+[00:00:04,151] INFO  {ScenarioGen} Node 3 has been started
+[00:00:05,065] WARN  {CroupierComp} <nid:2,oid:CROUPIER,o:01,bId:0> no neighbours
+[00:00:05,197] INFO  {ScenarioGen} Node 4 has been started
+[00:00:06,000] INFO  {AppComp} Node 1: after adding element with value 1337, 2pSet gset contains now: 
+[00:00:06,000] INFO  {AppComp} (Node 1) Value: 1337
+[00:00:06,000] INFO  {AppComp} (Node 1) Value: 1338
+[00:00:06,000] INFO  {AppComp} Node 1: after adding element with value 1338, 2pSet gset contains now: 
+[00:00:06,000] INFO  {AppComp} (Node 1) Value: 1337
+[00:00:06,000] INFO  {AppComp} (Node 1) Value: 1338
+[00:00:06,151] WARN  {CroupierComp} <nid:3,oid:CROUPIER,o:01,bId:0> no neighbours
+[00:00:06,231] INFO  {ScenarioGen} Node 5 has been started
+[00:00:07,065] INFO  {AppComp} Node 2: after adding element with value 1337, 2pSet gset contains now: 
+[00:00:07,065] INFO  {AppComp} (Node 2) Value: 1337
+[00:00:07,065] INFO  {AppComp} Node 2: after adding element with value 1338, 2pSet gset contains now: 
+[00:00:07,065] INFO  {AppComp} (Node 2) Value: 1337
+[00:00:07,065] INFO  {AppComp} (Node 2) Value: 1338
+[00:00:07,197] WARN  {CroupierComp} <nid:4,oid:CROUPIER,o:01,bId:0> no neighbours
+[00:00:08,151] INFO  {AppComp} Node 3: after adding element with value 1337, 2pSet gset contains now: 
+[00:00:08,151] INFO  {AppComp} (Node 3) Value: 1337
+[00:00:08,151] INFO  {AppComp} Node 3: after adding element with value 1338, 2pSet gset contains now: 
+[00:00:08,151] INFO  {AppComp} (Node 3) Value: 1337
+[00:00:08,151] INFO  {AppComp} (Node 3) Value: 1338
+[00:00:08,231] WARN  {CroupierComp} <nid:5,oid:CROUPIER,o:01,bId:0> no neighbours
+[00:00:09,197] INFO  {AppComp} Node 4: after adding element with value 1337, 2pSet gset contains now: 
+[00:00:09,197] INFO  {AppComp} (Node 4) Value: 1337
+[00:00:09,197] INFO  {AppComp} Node 4: after adding element with value 1338, 2pSet gset contains now: 
+[00:00:09,197] INFO  {AppComp} (Node 4) Value: 1337
+[00:00:09,197] INFO  {AppComp} (Node 4) Value: 1338
+[00:00:10,231] INFO  {AppComp} Node 5: after adding element with value 1337, 2pSet gset contains now: 
+[00:00:10,231] INFO  {AppComp} (Node 5) Value: 1337
+[00:00:10,231] INFO  {AppComp} Node 5: after adding element with value 1338, 2pSet gset contains now: 
+[00:00:10,231] INFO  {AppComp} (Node 5) Value: 1337
+[00:00:10,231] INFO  {AppComp} (Node 5) Value: 1338

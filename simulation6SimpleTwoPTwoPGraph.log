@@ -1,0 +1,134 @@
+[17:05:18,826] INFO  {CodeInstrumentation} no user defined instrumentation exceptions detected
+[00:00:02,000] INFO  {ScenarioGen} Node 1 has been started
+[00:00:03,065] INFO  {ScenarioGen} Node 2 has been started
+[00:00:04,000] WARN  {CroupierComp} <nid:1,oid:CROUPIER,o:01,bId:0> no partners - not shuffling
+[00:00:04,160] INFO  {ScenarioGen} Node 3 has been started
+[00:00:05,065] WARN  {CroupierComp} <nid:2,oid:CROUPIER,o:01,bId:0> no neighbours
+[00:00:05,246] INFO  {ScenarioGen} Node 4 has been started
+[00:00:06,160] WARN  {CroupierComp} <nid:3,oid:CROUPIER,o:01,bId:0> no neighbours
+[00:00:06,292] INFO  {ScenarioGen} Node 5 has been started
+[00:00:07,246] WARN  {CroupierComp} <nid:4,oid:CROUPIER,o:01,bId:0> no neighbours
+[00:00:07,292] INFO  {AppComp} Node 1: received a ADD_V operation from TestComp with address: 193.0.0.0:12345<11>
+[00:00:08,000] INFO  {AppComp} Node 1: after adding vertex with id 15 , VA contains now: 
+[00:00:08,000] INFO  {AppComp} (Node id  1) vertex id : 15
+[00:00:08,160] INFO  {AppComp} Node 3: after adding vertex with id 15 , VA contains now: 
+[00:00:08,160] INFO  {AppComp} (Node id  3) vertex id : 15
+[00:00:08,292] WARN  {CroupierComp} <nid:5,oid:CROUPIER,o:01,bId:0> no neighbours
+[00:00:08,326] INFO  {AppComp} Node 1: received a ADD_V operation from TestComp with address: 193.0.0.0:12345<12>
+[00:00:09,065] INFO  {AppComp} Node 2: after adding vertex with id 15 , VA contains now: 
+[00:00:09,065] INFO  {AppComp} (Node id  2) vertex id : 15
+[00:00:09,065] INFO  {AppComp} Node 2: after adding vertex with id 13 , VA contains now: 
+[00:00:09,065] INFO  {AppComp} (Node id  2) vertex id : 15
+[00:00:09,065] INFO  {AppComp} (Node id  2) vertex id : 13
+[00:00:09,246] INFO  {AppComp} Node 4: after adding vertex with id 15 , VA contains now: 
+[00:00:09,246] INFO  {AppComp} (Node id  4) vertex id : 15
+[00:00:09,246] INFO  {AppComp} Node 4: after adding vertex with id 13 , VA contains now: 
+[00:00:09,246] INFO  {AppComp} (Node id  4) vertex id : 15
+[00:00:09,246] INFO  {AppComp} (Node id  4) vertex id : 13
+[00:00:09,346] INFO  {AppComp} Node 1: received a ADD_V operation from TestComp with address: 193.0.0.0:12345<13>
+[00:00:10,000] INFO  {AppComp} Node 1: after adding vertex with id 13 , VA contains now: 
+[00:00:10,000] INFO  {AppComp} (Node id  1) vertex id : 15
+[00:00:10,000] INFO  {AppComp} (Node id  1) vertex id : 13
+[00:00:10,000] INFO  {AppComp} (Node id  1) vertex id : 17
+[00:00:10,000] INFO  {AppComp} Node 1: after adding vertex with id 17 , VA contains now: 
+[00:00:10,000] INFO  {AppComp} (Node id  1) vertex id : 15
+[00:00:10,000] INFO  {AppComp} (Node id  1) vertex id : 13
+[00:00:10,000] INFO  {AppComp} (Node id  1) vertex id : 17
+[00:00:10,160] INFO  {AppComp} Node 3: after adding vertex with id 13 , VA contains now: 
+[00:00:10,160] INFO  {AppComp} (Node id  3) vertex id : 15
+[00:00:10,160] INFO  {AppComp} (Node id  3) vertex id : 13
+[00:00:10,160] INFO  {AppComp} Node 3: after adding vertex with id 17 , VA contains now: 
+[00:00:10,160] INFO  {AppComp} (Node id  3) vertex id : 15
+[00:00:10,160] INFO  {AppComp} (Node id  3) vertex id : 13
+[00:00:10,160] INFO  {AppComp} (Node id  3) vertex id : 17
+[00:00:10,292] INFO  {AppComp} Node 5: after adding vertex with id 15 , VA contains now: 
+[00:00:10,292] INFO  {AppComp} (Node id  5) vertex id : 15
+[00:00:10,292] INFO  {AppComp} Node 5: after adding vertex with id 13 , VA contains now: 
+[00:00:10,292] INFO  {AppComp} (Node id  5) vertex id : 15
+[00:00:10,292] INFO  {AppComp} (Node id  5) vertex id : 13
+[00:00:10,292] INFO  {AppComp} Node 5: after adding vertex with id 17 , VA contains now: 
+[00:00:10,292] INFO  {AppComp} (Node id  5) vertex id : 15
+[00:00:10,292] INFO  {AppComp} (Node id  5) vertex id : 13
+[00:00:10,292] INFO  {AppComp} (Node id  5) vertex id : 17
+[00:00:10,381] INFO  {AppComp} Node 1: received a ADD_E operation from TestComp with address: 193.0.0.0:12345<14>
+[00:00:11,065] INFO  {AppComp} Node 2: after adding vertex with id 17 , VA contains now: 
+[00:00:11,065] INFO  {AppComp} (Node id  2) vertex id : 15
+[00:00:11,065] INFO  {AppComp} (Node id  2) vertex id : 13
+[00:00:11,065] INFO  {AppComp} (Node id  2) vertex id : 17
+[00:00:11,065] INFO  {AppComp} Node 2: after adding edge with id 1 with v1 13 and v2 15, EA contains now: 
+[00:00:11,065] INFO  {AppComp} (Node id  2) edge id : 1
+[00:00:11,246] INFO  {AppComp} Node 4: after adding vertex with id 17 , VA contains now: 
+[00:00:11,246] INFO  {AppComp} (Node id  4) vertex id : 15
+[00:00:11,246] INFO  {AppComp} (Node id  4) vertex id : 13
+[00:00:11,246] INFO  {AppComp} (Node id  4) vertex id : 17
+[00:00:11,246] INFO  {AppComp} Node 4: after adding edge with id 1 with v1 13 and v2 15, EA contains now: 
+[00:00:11,246] INFO  {AppComp} (Node id  4) edge id : 1
+[00:00:11,443] INFO  {AppComp} Node 1: received a ADD_E operation from TestComp with address: 193.0.0.0:12345<15>
+[00:00:12,000] INFO  {AppComp} Node 1: after adding edge with id 1 with v1 13 and v2 15, EA contains now: 
+[00:00:12,000] INFO  {AppComp} (Node id  1) edge id : 1
+[00:00:12,000] INFO  {AppComp} (Node id  1) edge id : 2
+[00:00:12,000] INFO  {AppComp} Node 1: after adding edge with id 2 with v1 17 and v2 15, EA contains now: 
+[00:00:12,000] INFO  {AppComp} (Node id  1) edge id : 1
+[00:00:12,000] INFO  {AppComp} (Node id  1) edge id : 2
+[00:00:12,160] INFO  {AppComp} Node 3: after adding edge with id 1 with v1 13 and v2 15, EA contains now: 
+[00:00:12,160] INFO  {AppComp} (Node id  3) edge id : 1
+[00:00:12,160] INFO  {AppComp} Node 3: after adding edge with id 2 with v1 17 and v2 15, EA contains now: 
+[00:00:12,160] INFO  {AppComp} (Node id  3) edge id : 1
+[00:00:12,160] INFO  {AppComp} (Node id  3) edge id : 2
+[00:00:12,292] INFO  {AppComp} Node 5: after adding edge with id 1 with v1 13 and v2 15, EA contains now: 
+[00:00:12,292] INFO  {AppComp} (Node id  5) edge id : 1
+[00:00:12,292] INFO  {AppComp} Node 5: after adding edge with id 2 with v1 17 and v2 15, EA contains now: 
+[00:00:12,292] INFO  {AppComp} (Node id  5) edge id : 1
+[00:00:12,292] INFO  {AppComp} (Node id  5) edge id : 2
+[00:00:12,538] INFO  {AppComp} Node 1: received a RM_V operation from TestComp with address: 193.0.0.0:12345<16>
+[00:00:13,065] INFO  {AppComp} Node 2: after adding edge with id 2 with v1 17 and v2 15, EA contains now: 
+[00:00:13,065] INFO  {AppComp} (Node id  2) edge id : 1
+[00:00:13,065] INFO  {AppComp} (Node id  2) edge id : 2
+[00:00:13,065] INFO  {AppComp} Node 2: after removing node with vertex id 15 , ER contains now: 
+[00:00:13,065] INFO  {AppComp} (Node id  2) edge id : 1
+[00:00:13,065] INFO  {AppComp} (Node id  2) edge id : 2
+[00:00:13,065] INFO  {AppComp} Node 2: after removing vertex with id 15 , VR contains now: 
+[00:00:13,065] INFO  {AppComp} (Node id  2) vertex id : 15
+[00:00:13,065] INFO  {AppComp} Node 2: and VA contains now: 
+[00:00:13,065] INFO  {AppComp} (Node id  2) vertex id : 15
+[00:00:13,065] INFO  {AppComp} (Node id  2) vertex id : 13
+[00:00:13,065] INFO  {AppComp} (Node id  2) vertex id : 17
+[00:00:13,246] INFO  {AppComp} Node 4: after adding edge with id 2 with v1 17 and v2 15, EA contains now: 
+[00:00:13,246] INFO  {AppComp} (Node id  4) edge id : 1
+[00:00:13,246] INFO  {AppComp} (Node id  4) edge id : 2
+[00:00:13,246] INFO  {AppComp} Node 4: after removing node with vertex id 15 , ER contains now: 
+[00:00:13,246] INFO  {AppComp} (Node id  4) edge id : 1
+[00:00:13,246] INFO  {AppComp} (Node id  4) edge id : 2
+[00:00:13,246] INFO  {AppComp} Node 4: after removing vertex with id 15 , VR contains now: 
+[00:00:13,246] INFO  {AppComp} (Node id  4) vertex id : 15
+[00:00:13,246] INFO  {AppComp} Node 4: and VA contains now: 
+[00:00:13,246] INFO  {AppComp} (Node id  4) vertex id : 15
+[00:00:13,246] INFO  {AppComp} (Node id  4) vertex id : 13
+[00:00:13,246] INFO  {AppComp} (Node id  4) vertex id : 17
+[00:00:14,000] INFO  {AppComp} Node 1: after removing node with vertex id 15 , ER contains now: 
+[00:00:14,000] INFO  {AppComp} (Node id  1) edge id : 1
+[00:00:14,000] INFO  {AppComp} (Node id  1) edge id : 2
+[00:00:14,000] INFO  {AppComp} Node 1: after removing vertex with id 15 , VR contains now: 
+[00:00:14,000] INFO  {AppComp} (Node id  1) vertex id : 15
+[00:00:14,000] INFO  {AppComp} Node 1: and VA contains now: 
+[00:00:14,000] INFO  {AppComp} (Node id  1) vertex id : 15
+[00:00:14,000] INFO  {AppComp} (Node id  1) vertex id : 13
+[00:00:14,000] INFO  {AppComp} (Node id  1) vertex id : 17
+[00:00:14,160] INFO  {AppComp} Node 3: after removing node with vertex id 15 , ER contains now: 
+[00:00:14,160] INFO  {AppComp} (Node id  3) edge id : 1
+[00:00:14,160] INFO  {AppComp} (Node id  3) edge id : 2
+[00:00:14,160] INFO  {AppComp} Node 3: after removing vertex with id 15 , VR contains now: 
+[00:00:14,160] INFO  {AppComp} (Node id  3) vertex id : 15
+[00:00:14,160] INFO  {AppComp} Node 3: and VA contains now: 
+[00:00:14,160] INFO  {AppComp} (Node id  3) vertex id : 15
+[00:00:14,160] INFO  {AppComp} (Node id  3) vertex id : 13
+[00:00:14,160] INFO  {AppComp} (Node id  3) vertex id : 17
+[00:00:14,292] INFO  {AppComp} Node 5: after removing node with vertex id 15 , ER contains now: 
+[00:00:14,292] INFO  {AppComp} (Node id  5) edge id : 1
+[00:00:14,292] INFO  {AppComp} (Node id  5) edge id : 2
+[00:00:14,292] INFO  {AppComp} Node 5: after removing vertex with id 15 , VR contains now: 
+[00:00:14,292] INFO  {AppComp} (Node id  5) vertex id : 15
+[00:00:14,292] INFO  {AppComp} Node 5: and VA contains now: 
+[00:00:14,292] INFO  {AppComp} (Node id  5) vertex id : 15
+[00:00:14,292] INFO  {AppComp} (Node id  5) vertex id : 13
+[00:00:14,292] INFO  {AppComp} (Node id  5) vertex id : 17
