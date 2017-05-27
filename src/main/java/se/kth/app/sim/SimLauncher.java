@@ -33,17 +33,17 @@ public class SimLauncher {
         //SimulationScenario simpleKillNodeScenario = ScenarioGen.simpleKillNodeSimulation();
         //simpleKillNodeScenario.simulate(LauncherComp.class);
 
-       // SimulationScenario simpleReviveNodeScenario = ScenarioGen.simpleKillReviveNodeSimulation();
+       // SimulationScenario simpleReviveNodeScenario = ScenarioGen.simple2pSetKillReviveNodeSimulation();
        // simpleReviveNodeScenario.simulate(LauncherComp.class);
 
        // SimulationScenario simpleOrSetScenario = ScenarioGen.simpleOrSetSimulation();
        // simpleOrSetScenario.simulate(LauncherComp.class);
 
-      //  SimulationScenario simpleTPTPGraphScenario = ScenarioGen.simpleTPTPGraphSimulation1();
-      //  simpleTPTPGraphScenario.simulate(LauncherComp.class);
+       // SimulationScenario simpleTPTPGraphScenario = ScenarioGen.simpleTPTPGraphSimulation1();
+       // simpleTPTPGraphScenario.simulate(LauncherComp.class);
 
-        SimulationScenario simpleTPTPGraphScenario2 = ScenarioGen.simpleTPTPGraphSimulation2();
-        simpleTPTPGraphScenario2.simulate(LauncherComp.class);
+      //  SimulationScenario simpleTPTPGraphScenario2 = ScenarioGen.simpleTPTPGraphSimulation2();
+       // simpleTPTPGraphScenario2.simulate(LauncherComp.class);
 
     }
 }

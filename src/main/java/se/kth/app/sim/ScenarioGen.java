@@ -262,8 +262,8 @@ public class ScenarioGen {
                 systemSetup.start();
                 startBootstrapServer.startAfterTerminationOf(1000, systemSetup);
                 startPeers.startAfterTerminationOf(1000, startBootstrapServer);
-                startTestComp.startAfterStartOf(100, startPeers);
-                startKillNode.startAfterStartOf(1000,startTestComp);
+                startTestComp.startAfterTerminationOf(100, startPeers);
+                startKillNode.startAfterTerminationOf(1000,startTestComp);
 
                 terminateAfterTerminationOf(10000, startKillNode);
             }
@@ -272,7 +272,7 @@ public class ScenarioGen {
         return scen;
     }
 
-    public static SimulationScenario simpleKillReviveNodeSimulation() {
+    public static SimulationScenario simple2pSetKillReviveNodeSimulation() {
         SimulationScenario scen = new SimulationScenario() {
             {
                 StochasticProcess systemSetup = new StochasticProcess() {

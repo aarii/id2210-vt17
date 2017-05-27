@@ -202,10 +202,21 @@ public class AppComp extends ComponentDefinition {
   public void simulateTwoPSet(Operation operation){
     if(operation.op.equalsIgnoreCase("ADD")){
       twoPSet.addElement(operation.value, selfAdr.getId());
+      LOG.info("Node {}: after adding element with value {}, 2pSet gset contains now: ", selfAdr.getId(), operation.value);
+      for(Object o : twoPSet.gset.set){
+        LOG.info("(Node "+ selfAdr.getId()+ ") Value: " + o );
+      }
+      System.out.println();
+
     }
 
     if(operation.op.equalsIgnoreCase("RM")){
       twoPSet.removeElement(operation.value, selfAdr.getId());
+      LOG.info("Node {}: after removing element with value {}, 2pSet tombstoneset contains now: ", selfAdr.getId(), operation.value);
+      for(Object o : twoPSet.tombstoneset.set){
+        LOG.info("(Node "+ selfAdr.getId()+ ") Value: " + o );
+      }
+      System.out.println();
     }
   }
 
